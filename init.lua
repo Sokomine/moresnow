@@ -30,7 +30,6 @@ moresnow.on_construct = function( pos )
 		local p2o = moresnow.snow_param2_offset[ minetest.get_content_id( node.name )];
 		if( p2o ) then
 			p2 = (p2 + p2o ) % 4;
-print('ACHTUNG: offset: '..tostring( moresnow.snow_param2_offset[ minetest.get_content_id( node.name )] ));
 		end
 
 		-- if this is a stair or a roof node from homedecor or technics cnc machine;
