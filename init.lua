@@ -26,6 +26,13 @@ moresnow.on_construct = function( pos )
 		end
 
 		local p2 = node.param2;
+		-- homedecor and technic have diffrent ideas about param2...
+		local p2o = moresnow.snow_param2_offset[ minetest.get_content_id( node.name )];
+		if( p2o ) then
+			p2 = (p2 + p2o ) % 4;
+print('ACHTUNG: offset: '..tostring( moresnow.snow_param2_offset[ minetest.get_content_id( node.name )] ));
+		end
+
 		-- if this is a stair or a roof node from homedecor or technics cnc machine;
 		-- those nodes are all comparable regarding rotation
 		if(     suggested == 'moresnow:snow_stair_top' or suggested == 'moresnow:snow_ramp_top' ) then
@@ -218,9 +225,8 @@ minetest.register_node("moresnow:snow_slab_top", {
 
 
 
-moresnow.register_shape = function( shape, new_name, valid_for )
+moresnow.register_shape = function( shape, new_name )
 	
-	-- actually, that would be homedecor.detail, but we don't want to exaggerate; 16 certainly is enough
 	local detail = 16;
 
 	local slopeboxedge = {};
@@ -273,18 +279,6 @@ moresnow.register_shape = function( shape, new_name, valid_for )
 		on_construct = moresnow.on_construct,
 	})
 
-	local c_new_snow_node = minetest.get_content_id( new_name );
-	local c_ignore        = minetest.get_content_id( 'ignore' );
-	if( not( c_new_snow_node )) then
-		return;
-	end
-	for _,v in ipairs( valid_for ) do
-		local id = minetest.get_content_id( v );
-		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
-		if( id and id ~= c_ignore ) then
-			moresnow.snow_cover[ id ] = c_new_snow_node;
-		end
-	end
 end
 
 
@@ -293,8 +287,56 @@ end
 -- (of course this only works for a few shapes and does not even take rotation into consideration)
 moresnow.snow_cover = {};
 
+-- homedecor and technic did not settle on common param2 interpretation :-(
+moresnow.snow_param2_offset = {};
+
+-- homedecor 3d shingles and technic cnc items are handled here
+moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic_postfix, param2_offset )
+	-- these nodes are only supported if homedecor and/or technic are installed
+	local c_new_snow_node = minetest.get_content_id( new_name );
+	if( not( c_new_snow_node )) then
+		return;
+	end
+
+	local c_ignore        = minetest.get_content_id( 'ignore' );
+
+	local homedecor_materials = {'terracotta','wood','asphalt'};
+	local technic_materials   = {'dirt','wood','stone','cobble','brick','sandstone','leaves',
+					'tree','steelblock','bronzeblock','stainless_steel','marble','granite'};
+
+	for _,v in ipairs( homedecor_materials ) do
+		local id = minetest.get_content_id( homedecor_prefix..v );
+		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
+		if( id and id ~= c_ignore ) then
+			moresnow.snow_cover[ id ] = c_new_snow_node;
+		end
+	end
+	for _,v in ipairs( technic_materials ) do
+		local prefix = 'default:';
+		if( v=='stainless_steel' or v=='marble' or v=='granite' ) then
+			prefix = 'technic:';
+		end
+
+		local id = minetest.get_content_id( prefix..v..technic_postfix );
+		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
+		if( id and id ~= c_ignore ) then
+			moresnow.snow_cover[                 id ] = c_new_snow_node;
+			-- homedecor and technic use diffrent param2 for the same shape
+			if( param2_offset ) then
+				moresnow.snow_param2_offset[ id ] = param2_offset;
+			end
+		end
+	end
+end
+
 -- identify stairs and slabs (roughly!) by their nodeboxes
 moresnow.identify_stairs_and_slabs = function()
+
+	moresnow.identify_special_slopes( 'moresnow:snow_ramp_top',       'homedecor:shingle_side_',         '_technic_cnc_slope', 0 );
+	moresnow.identify_special_slopes( 'moresnow:snow_ramp_outer_top', 'homedecor:shingle_outer_corner_', '_technic_cnc_slope_edge', 1 );
+	moresnow.identify_special_slopes( 'moresnow:snow_ramp_inner_top', 'homedecor:shingle_inner_corner_', '_technic_cnc_slope_inner_edge', 1 );
+
+	-- actually, that would be homedecor.detail, but we don't want to exaggerate; 16 certainly is enough
 
 	local c_snow_stair = minetest.get_content_id( 'moresnow:snow_stair_top' );
 	local c_snow_slab  = minetest.get_content_id( 'moresnow:snow_slab_top' );
@@ -375,23 +417,13 @@ moresnow.identify_stairs_and_slabs = function()
 	end
 end
 
-
--- TODO: only add these if either technic (with its cnc machine) or homedecor (with shingles) are installed
--- TODO: add fitting nodes from cnc machine from technic
-moresnow.register_shape( 1, 'moresnow:snow_ramp_top',
-		{'homedecor:shingle_side_terracotta',
-		 'homedecor:shingle_side_wood',
-		 'homedecor:shingle_side_asphalt' });
-
-moresnow.register_shape( 2, 'moresnow:snow_ramp_outer_top',
-		{'homedecor:shingle_outer_corner_terracotta',
-		 'homedecor:shingle_outer_corner_wood',
-		 'homedecor:shingle_outer_corner_asphalt'});
-
-moresnow.register_shape( 3, 'moresnow:snow_ramp_inner_top',
-		{'homedecor:shingle_inner_corner_terracotta',
-		 'homedecor:shingle_inner_corner_wood',
-		 'homedecor:shingle_inner_corner_asphalt'});
+-- only add these if either technic (with its cnc machine) or homedecor (with shingles) are installed
+if(    minetest.get_modpath( 'homedecor' )
+    or minetest.get_modpath( 'technic' )) then
+	moresnow.register_shape( 1, 'moresnow:snow_ramp_top' );
+	moresnow.register_shape( 2, 'moresnow:snow_ramp_outer_top');
+	moresnow.register_shape( 3, 'moresnow:snow_ramp_inner_top');
+end
 
 -- search for stairs and slabs after all nodes have been generated
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
