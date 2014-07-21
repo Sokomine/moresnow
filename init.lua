@@ -83,7 +83,23 @@ moresnow.on_construct = function( pos )
 		-- snow_top is a special node suitable for nodeboxes; BUT: it only looks acceptable if the
 		-- node below that nodebox/torch/fence/etc is a solid one
 		if( suggested == 'moresnow:snow_top' ) then
+
 			local node2      = minetest.get_node( {x=pos.x, y=pos.y-2, z=pos.z});
+	
+			if( node2 and node2.name and node2.name == 'default:snow' ) then
+				if( node2.param2 and node2.param2+8 >= 64 ) then
+					minetest.set_node( {x=pos.y,y=pos.y-2, z=pos.z}, { name = 'default:snowblock' } );
+					return;
+				else
+					if( not( node2.param2 )) then
+						node2.param2 = 8;
+					end
+					minetest.set_node( {x=pos.x,y=pos.y-2, z=pos.z}, { name = 'default:snow', param2 = (node2.param2+8) } );
+					minetest.remove_node( pos );
+					return;
+				end
+			end
+	
 			-- no information about the node below available - we don't know what to do
 			if( not( node2 ) or node2.name == 'air' or node2.name == 'ignore' ) then
 				-- in such a case it helps to drop the snow and let it fall until it hits something
