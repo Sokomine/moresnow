@@ -254,6 +254,75 @@ minetest.register_node("moresnow:snow_slab_top", {
 })
 
 
+minetest.register_node("moresnow:snow_outer_stair_top", {
+	description = "Snow",
+	tiles = {"default_snow.png"},
+	inventory_image = "default_snowball.png",
+	wield_image = "default_snowball.png",
+	is_ground_content = true,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	buildable_to = true,
+	leveled = 7,
+	drawtype = "nodebox",
+	freezemelt = "default:water_flowing",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			        {-0.5, -1.0, -0.5,   0, -1.0+2/16, 0  },
+			        {-0.5, -0.5,    0,   0, -0.5+2/16, 0.5},
+			        {   0, -1.0, -0.5, 0.5, -1.0+2/16, 0.5},
+
+				{-0.5,      -1.0+2/16,    0-1/32,  0,   -0.5,       0  },
+				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
+
+				{0,         -1.0+2/16,    0,    0+1/32, -0.5,       0.5},
+				{0.5,       -1.5,      -0.5,  0.5+1/32, -1.0,       0.5},
+		},
+	},
+	drop = "default:snow",
+	groups = {crumbly=3,falling_node=1, melts=1, float=1},
+	sounds = default.node_sound_dirt_defaults({
+		footstep = {name="default_snow_footstep", gain=0.25},
+		dug = {name="default_snow_footstep", gain=0.75},
+	}),
+	on_construct = moresnow.on_construct,
+})
+
+
+minetest.register_node("moresnow:snow_inner_stair_top", {
+	description = "Snow",
+	tiles = {"default_snow.png"},
+	inventory_image = "default_snowball.png",
+	wield_image = "default_snowball.png",
+	is_ground_content = true,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	buildable_to = true,
+	leveled = 7,
+	drawtype = "nodebox",
+	freezemelt = "default:water_flowing",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			        {   0, -1.0, -0.5, 0.5, -1.0+2/16, 0  },
+
+			        {   0, -0.5,    0, 0.5, -0.5+2/16, 0.5},
+			        {-0.5, -0.5, -0.5, 0,   -0.5+2/16, 0.5},
+
+				{   0,      -1.0+2/16,  0-1/32, 0.5,    -0.5,       0 },
+				{   0,      -1.0+2/16, -0.5,    0+1/32, -0.5,        0},
+		},
+	},
+	drop = "default:snow",
+	groups = {crumbly=3,falling_node=1, melts=1, float=1},
+	sounds = default.node_sound_dirt_defaults({
+		footstep = {name="default_snow_footstep", gain=0.25},
+		dug = {name="default_snow_footstep", gain=0.75},
+	}),
+	on_construct = moresnow.on_construct,
+})
+
 
 moresnow.register_shape = function( shape, new_name )
 	
@@ -372,6 +441,8 @@ moresnow.identify_stairs_and_slabs = function()
 	local c_snow_slab  = minetest.get_content_id( 'moresnow:snow_slab_top' );
 	local c_snow_top   = minetest.get_content_id( 'moresnow:snow_top' );
 	local c_snow       = minetest.get_content_id( 'default:snow' );
+	local c_snow_outer_stair = minetest.get_content_id( 'moresnow:snow_outer_stair_top' );
+	local c_snow_inner_stair = minetest.get_content_id( 'moresnow:snow_inner_stair_top' );
 
 	for n,v in pairs( minetest.registered_nodes ) do
 
@@ -421,9 +492,30 @@ moresnow.identify_stairs_and_slabs = function()
 				      and math.abs( c[10]-c[7]) >= 0.9 ) then
 
 					moresnow.snow_cover[ id ] = c_snow_stair;
+
+				-- moreblocks _outer:
+				elseif(   nb[1][1]==-0.5 and nb[1][2]==-0.5 and nb[1][3]==-0.5
+				      and nb[1][4]== 0.5 and nb[1][5]== 0   and nb[1][6]== 0.5
+				      and nb[2][1]==-0.5 and nb[2][2]== 0   and nb[2][3]== 0  
+				      and nb[2][4]== 0   and nb[2][5]== 0.5 and nb[2][6]== 0.5 ) then
+		
+					moresnow.snow_cover[ id ] = c_snow_outer_stair;
 				else
 					moresnow.snow_cover[ id ] = c_snow_top;
 				end
+
+			-- moreblocks _inner:
+			elseif( #nb==3 
+				and nb[1][1]==-0.5 and nb[1][2]==-0.5 and nb[1][3]==-0.5 
+				and nb[1][4]== 0.5 and nb[1][5]== 0   and nb[1][6]== 0.5 
+
+				and nb[2][1]==-0.5 and nb[2][2]== 0   and nb[2][3]== 0  
+				and nb[2][4]== 0.5 and nb[2][5]== 0.5 and nb[2][6]== 0.5 
+
+				and nb[3][1]==-0.5 and nb[3][2]== 0   and nb[3][3]==-0.5
+				and nb[3][4]== 0   and nb[3][5]== 0.5 and nb[3][6]== 0 ) then
+
+				moresnow.snow_cover[ id ] = c_snow_inner_stair;
 			else 
 				moresnow.snow_cover[ id ] = c_snow_top;
 			end
@@ -459,3 +551,7 @@ end
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
 
 
+-- TODO: add a snow cannon?
+-- TODO: add the autumnleaves from LazyJ
+-- TODO: add a function to use this with voxelmanip
+-- TODO: add a "snow" command?
