@@ -117,7 +117,22 @@ moresnow.on_construct = function( pos )
 			if( suggested == 'default:snow' ) then
 				-- if there is snow already, make it higher
 				if( old and old.name and old.name == suggested ) then
-					p2 = old.param2 + 10;
+					if( old.param2 and old.param2 + 8 >= 64 ) then
+						minetest.set_node( pos, { name = 'default:snowblock' } );
+						-- we are done - the next snow will land on the surface of the snowblock below
+						return;
+--[[
+						local above = minetest.get_node( {x=pos.x, y=pos.y+1, z=pos.z} );
+						if( above and above.name and above.name == 'air' ) then
+							minetest.set_node( {x=pos.x, y=pos.y+1, z=pos.z}, { name = 'default:snow', param2 = 8 } );
+							return;
+						end
+--]]
+					elseif( not( old.param2 ) or old.param2 < 1 ) then
+						p2 = 8;
+					else
+						p2 = old.param2 + 1;
+					end
 				-- prevent the snow from getting higher
 				else
 					p2 = 0;
