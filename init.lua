@@ -1,6 +1,34 @@
 
 moresnow = {}
 
+-- the general node definition for all these snow tops (only name and nodebox vary)
+moresnow.register_snow_top = function( node_name, fixed_nodebox )
+	minetest.register_node( node_name, {
+		description = "Snow",
+		tiles = {"default_snow.png"},
+		inventory_image = "default_snowball.png",
+		wield_image = "default_snowball.png",
+		is_ground_content = true,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		buildable_to = true,
+		drawtype = "nodebox",
+		freezemelt = "default:water_flowing",
+		node_box = {
+			-- leveled would not work well in this situation
+			type = "fixed",
+			fixed = fixed_nodebox,
+		},
+		drop = "default:snow",
+		groups = {crumbly=3,falling_node=1, melts=1, float=1, not_in_creative_inventory=1},
+		sounds = default.node_sound_dirt_defaults({
+			footstep = {name="default_snow_footstep", gain=0.25},
+			dug = {name="default_snow_footstep", gain=0.75},
+		}),
+		on_construct = moresnow.on_construct,
+	})
+end
+
 
 moresnow.on_construct = function( pos )
 	
@@ -162,113 +190,21 @@ moresnow.on_construct = function( pos )
 	end
 end
 
+
+-- now that on_construct has been defined, we can start creating the actual nodes
 minetest.registered_nodes[ 'default:snow' ].on_construct = moresnow.on_construct;
 
 -- the nodebox for this snow node lies one node DEEPER than the node the snow is in;
 -- thus, nodebox-like nodes covered by snow may look less strange
-minetest.register_node("moresnow:snow_top", {
-	description = "Snow",
-	tiles = {"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
-	is_ground_content = true,
-	paramtype = "light",
-	buildable_to = true,
-	leveled = 7,
-	drawtype = "nodebox",
-	freezemelt = "default:water_flowing",
-	node_box = {
-		-- leveled would not work well in this situation
-		type = "fixed",
-		fixed = {
-			{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5},
-		},
-	},
-	drop = "default:snow",
-	groups = {crumbly=3,falling_node=1, melts=1, float=1},
-	sounds = default.node_sound_dirt_defaults({
-		footstep = {name="default_snow_footstep", gain=0.25},
-		dug = {name="default_snow_footstep", gain=0.75},
-	}),
-	on_construct = moresnow.on_construct,
-})
-
-
-minetest.register_node("moresnow:snow_stair_top", {
-	description = "Snow",
---	tiles = {"default_snow.png","default_snow.png","default_ice.png","default_snow.png"},
-	tiles = {"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
-	is_ground_content = true,
-	paramtype = "light",
-	paramtype2 = "facedir",
-	buildable_to = true,
-	leveled = 7,
-	drawtype = "nodebox",
-	freezemelt = "default:water_flowing",
-	node_box = {
-		type = "fixed",
-		fixed = {
+moresnow.register_snow_top( "moresnow:snow_top", {{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5}} );
+moresnow.register_snow_top( "moresnow:snow_stair_top", {
 				{-0.5,      -1.0,      -0.5,       0.5, -1.0+2/16,  0},
 				{-0.5,      -0.5,       0,         0.5, -0.5+2/16,  0.5},
 				{-0.5,      -1.0+2/16,    0-1/32,  0.5, -0.5,       0  },
 				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
-		},
-	},
-	drop = "default:snow",
-	groups = {crumbly=3,falling_node=1, melts=1, float=1},
-	sounds = default.node_sound_dirt_defaults({
-		footstep = {name="default_snow_footstep", gain=0.25},
-		dug = {name="default_snow_footstep", gain=0.75},
-	}),
-	on_construct = moresnow.on_construct,
-})
-
-
-minetest.register_node("moresnow:snow_slab_top", {
-	description = "Snow",
-	tiles = {"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
-	is_ground_content = true,
-	paramtype = "light",
-	paramtype2 = "facedir",
-	buildable_to = true,
-	leveled = 7,
-	drawtype = "nodebox",
-	freezemelt = "default:water_flowing",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			        {-0.5, -1.0, -0.5, 0.5, -1.0+2/16, 0.5},
-		},
-	},
-	drop = "default:snow",
-	groups = {crumbly=3,falling_node=1, melts=1, float=1},
-	sounds = default.node_sound_dirt_defaults({
-		footstep = {name="default_snow_footstep", gain=0.25},
-		dug = {name="default_snow_footstep", gain=0.75},
-	}),
-	on_construct = moresnow.on_construct,
-})
-
-
-minetest.register_node("moresnow:snow_outer_stair_top", {
-	description = "Snow",
-	tiles = {"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
-	is_ground_content = true,
-	paramtype = "light",
-	paramtype2 = "facedir",
-	buildable_to = true,
-	leveled = 7,
-	drawtype = "nodebox",
-	freezemelt = "default:water_flowing",
-	node_box = {
-		type = "fixed",
-		fixed = {
+		});
+moresnow.register_snow_top( "moresnow:snow_slab_top", { {-0.5, -1.0, -0.5, 0.5, -1.0+2/16, 0.5}});
+moresnow.register_snow_top( "moresnow:snow_outer_stair_top", {
 			        {-0.5, -1.0, -0.5,   0, -1.0+2/16, 0  },
 			        {-0.5, -0.5,    0,   0, -0.5+2/16, 0.5},
 			        {   0, -1.0, -0.5, 0.5, -1.0+2/16, 0.5},
@@ -278,33 +214,8 @@ minetest.register_node("moresnow:snow_outer_stair_top", {
 
 				{0,         -1.0+2/16,    0,    0+1/32, -0.5,       0.5},
 				{0.5,       -1.5,      -0.5,  0.5+1/32, -1.0,       0.5},
-		},
-	},
-	drop = "default:snow",
-	groups = {crumbly=3,falling_node=1, melts=1, float=1},
-	sounds = default.node_sound_dirt_defaults({
-		footstep = {name="default_snow_footstep", gain=0.25},
-		dug = {name="default_snow_footstep", gain=0.75},
-	}),
-	on_construct = moresnow.on_construct,
-})
-
-
-minetest.register_node("moresnow:snow_inner_stair_top", {
-	description = "Snow",
-	tiles = {"default_snow.png"},
-	inventory_image = "default_snowball.png",
-	wield_image = "default_snowball.png",
-	is_ground_content = true,
-	paramtype = "light",
-	paramtype2 = "facedir",
-	buildable_to = true,
-	leveled = 7,
-	drawtype = "nodebox",
-	freezemelt = "default:water_flowing",
-	node_box = {
-		type = "fixed",
-		fixed = {
+		});
+moresnow.register_snow_top( "moresnow:snow_inner_stair_top", {
 			        {   0, -1.0, -0.5, 0.5, -1.0+2/16, 0  },
 
 			        {   0, -0.5,    0, 0.5, -0.5+2/16, 0.5},
@@ -312,16 +223,7 @@ minetest.register_node("moresnow:snow_inner_stair_top", {
 
 				{   0,      -1.0+2/16,  0-1/32, 0.5,    -0.5,       0 },
 				{   0,      -1.0+2/16, -0.5,    0+1/32, -0.5,        0},
-		},
-	},
-	drop = "default:snow",
-	groups = {crumbly=3,falling_node=1, melts=1, float=1},
-	sounds = default.node_sound_dirt_defaults({
-		footstep = {name="default_snow_footstep", gain=0.25},
-		dug = {name="default_snow_footstep", gain=0.75},
-	}),
-	on_construct = moresnow.on_construct,
-})
+		});
 
 
 moresnow.register_shape = function( shape, new_name )
@@ -353,31 +255,15 @@ moresnow.register_shape = function( shape, new_name )
 		end
         end
 
-	minetest.register_node( new_name, {
-		description = "Snow",
-		tiles = {"default_snow.png"},
-		inventory_image = "default_snowball.png",
-		wield_image = "default_snowball.png",
-		is_ground_content = true,
-		paramtype = "light",
-		paramtype2 = "facedir",
-		buildable_to = true,
-		leveled = 7,
-		drawtype = "nodebox",
-		freezemelt = "default:water_flowing",
-		node_box = {
-			type = "fixed",
-			fixed = slopeboxedge,
-		},
-		drop = "default:snow",
-		groups = {crumbly=3,falling_node=1, melts=1, float=1},
-		sounds = default.node_sound_dirt_defaults({
-			footstep = {name="default_snow_footstep", gain=0.25},
-			dug = {name="default_snow_footstep", gain=0.75},
-		}),
-		on_construct = moresnow.on_construct,
-	})
+	moresnow.register_snow_top( new_name, slopeboxedge );
+end
 
+-- only add these if either technic (with its cnc machine) or homedecor (with shingles) are installed
+if(    minetest.get_modpath( 'homedecor' )
+    or minetest.get_modpath( 'technic' )) then
+	moresnow.register_shape( 1, 'moresnow:snow_ramp_top' );
+	moresnow.register_shape( 2, 'moresnow:snow_ramp_outer_top');
+	moresnow.register_shape( 3, 'moresnow:snow_ramp_inner_top');
 end
 
 
@@ -539,16 +425,10 @@ moresnow.identify_stairs_and_slabs = function()
 	end
 end
 
--- only add these if either technic (with its cnc machine) or homedecor (with shingles) are installed
-if(    minetest.get_modpath( 'homedecor' )
-    or minetest.get_modpath( 'technic' )) then
-	moresnow.register_shape( 1, 'moresnow:snow_ramp_top' );
-	moresnow.register_shape( 2, 'moresnow:snow_ramp_outer_top');
-	moresnow.register_shape( 3, 'moresnow:snow_ramp_inner_top');
-end
-
 -- search for stairs and slabs after all nodes have been generated
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
+
+--dofile(minetest.get_modpath("moresnow")..'/snow_cannon.lua');
 
 
 -- TODO: add a snow cannon?
