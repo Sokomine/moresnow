@@ -5,7 +5,8 @@ moresnow = {}
 moresnow.register_snow_top = function( node_name, fixed_nodebox )
 	minetest.register_node( node_name, {
 		description = "Snow",
-		tiles = {"default_snow.png"},
+		tiles = {"default_snow.png"},  
+--		tiles = {"moreautumn.png"},
 		inventory_image = "default_snowball.png",
 		wield_image = "default_snowball.png",
 		is_ground_content = true,
@@ -428,10 +429,8 @@ end
 -- search for stairs and slabs after all nodes have been generated
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
 
---dofile(minetest.get_modpath("moresnow")..'/snow_cannon.lua');
+dofile(minetest.get_modpath("moresnow")..'/snow_cannon.lua');
 
 
--- TODO: add a snow cannon?
 -- TODO: add the autumnleaves from LazyJ
 -- TODO: add a function to use this with voxelmanip
--- TODO: add a "snow" command?
