@@ -149,6 +149,10 @@ moresnow.snow_cannon_update_formspec = function( meta, is_active )
 	else
 		start = 'start';
 	end
+	local button_crazy = '';
+	if( moresnow.crazy_mode ) then
+		button_crazy = "button_exit[6.5,1.5;2,0.5;crazy;crazy]";
+	end
 	meta:set_string( 'formspec',
 		"size[10.5,8]"..
 		( default.gui_bg or '')..
@@ -160,7 +164,7 @@ moresnow.snow_cannon_update_formspec = function( meta, is_active )
 		"button_exit[6.5,0;2,0.5;"..start..";"..start.."]"..
 		"button_exit[6.5,0.5;2,0.5;ordered;ordered]"..
 		"button_exit[6.5,1.0;2,0.5;random;random]"..
-		"button_exit[6.5,1.5;2,0.5;crazy;crazy]"..
+		button_crazy..
 		"label[0,2;Water reservoir:]"..
 		"label[2,2;Fill up with water buckets or ice blocks.]"..
 		"list[current_name;buckets;0,2.5;10,1;]"..

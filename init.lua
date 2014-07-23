@@ -1,16 +1,28 @@
 
 moresnow = {}
 
+--------------------------------------------------------------------------------
+-- Configuration
+--------------------------------------------------------------------------------
 -- if set to true, fallen autum leaves will be supported just like snow
 -- The txture and idea for them came from LazyJ.
 moresnow.enable_autumnleaves = true
-
+-- the snow cannon allows to create snow
+moresnow.enable_snow_cannon  = true
+-- with this set, the snow cannon can *shoot* snowballs - which will fly a long way;
+-- on servers, set this to false
+moresnow.crazy_mode          = true
+-- end of configuration
+--------------------------------------------------------------------------------
 
 -- defines the on_construct function for falling/placed snow(balls)
 dofile(minetest.get_modpath("moresnow")..'/snow_on_construct.lua');
 -- devines the 8 types of snow covers: general nodebox snow cover, stairs, slabs,
 -- outer edge stair, inner edge stair, 3x homedecor shingles/technic cnc shapes
 dofile(minetest.get_modpath("moresnow")..'/snow_cover_nodes.lua');
+-- which snow node equivals which leaves node?
+moresnow.nodetypes = {'snow','autumnleaves'};
+moresnow.build_translation_table();
 
 -- some defines which fascilitate identification of nodes
 moresnow.c_ignore           = minetest.get_content_id( 'ignore' );
@@ -29,8 +41,7 @@ moresnow.c_snow_ramp_inner  = minetest.get_content_id( 'moresnow:snow_ramp_inner
 -- this is important for finding the right snow cover to put on the shape below
 dofile(minetest.get_modpath("moresnow")..'/snow_analyze_shapes.lua');
 -- a snow cannon that shoots snow around
-dofile(minetest.get_modpath("moresnow")..'/snow_cannon.lua');
+if( moresnow.enable_snow_cannon ) then
+	dofile(minetest.get_modpath("moresnow")..'/snow_cannon.lua');
+end
 
-
--- TODO: make the autumnleaves from LazyJ working
--- TODO: add a function to use this with voxelmanip
