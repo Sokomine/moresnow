@@ -15,8 +15,6 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 		return;
 	end
 
-	local c_ignore        = minetest.get_content_id( 'ignore' );
-
 	local homedecor_materials = {'terracotta','wood','asphalt'};
 	local technic_materials   = {'dirt','wood','stone','cobble','brick','sandstone','leaves',
 					'tree','steelblock','bronzeblock','stainless_steel','marble','granite'};
@@ -24,7 +22,7 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 	for _,v in ipairs( homedecor_materials ) do
 		local id = minetest.get_content_id( homedecor_prefix..v );
 		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
-		if( id and id ~= c_ignore ) then
+		if( id and id ~= moresnow.c_ignore ) then
 			moresnow.snow_cover[ id ] = c_new_snow_node;
 		end
 	end
@@ -36,7 +34,7 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 
 		local id = minetest.get_content_id( prefix..v..technic_postfix );
 		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
-		if( id and id ~= c_ignore ) then
+		if( id and id ~= moresnow.c_ignore ) then
 			moresnow.snow_cover[                 id ] = c_new_snow_node;
 			-- homedecor and technic use diffrent param2 for the same shape
 			if( param2_offset ) then
@@ -52,15 +50,6 @@ moresnow.identify_stairs_and_slabs = function()
 	moresnow.identify_special_slopes( 'moresnow:snow_ramp_top',       'homedecor:shingle_side_',         '_technic_cnc_slope', 0 );
 	moresnow.identify_special_slopes( 'moresnow:snow_ramp_outer_top', 'homedecor:shingle_outer_corner_', '_technic_cnc_slope_edge', 1 );
 	moresnow.identify_special_slopes( 'moresnow:snow_ramp_inner_top', 'homedecor:shingle_inner_corner_', '_technic_cnc_slope_inner_edge', 1 );
-
-	-- actually, that would be homedecor.detail, but we don't want to exaggerate; 16 certainly is enough
-
-	local c_snow_stair = minetest.get_content_id( 'moresnow:snow_stair_top' );
-	local c_snow_slab  = minetest.get_content_id( 'moresnow:snow_slab_top' );
-	local c_snow_top   = minetest.get_content_id( 'moresnow:snow_top' );
-	local c_snow       = minetest.get_content_id( 'default:snow' );
-	local c_snow_outer_stair = minetest.get_content_id( 'moresnow:snow_outer_stair_top' );
-	local c_snow_inner_stair = minetest.get_content_id( 'moresnow:snow_inner_stair_top' );
 
 	for n,v in pairs( minetest.registered_nodes ) do
 
@@ -95,7 +84,7 @@ moresnow.identify_stairs_and_slabs = function()
 				and math.abs( nb[4]-nb[1] ) >= 0.9 
 				and math.abs( nb[6]-nb[3] ) >= 0.9 ))  then
 
-				moresnow.snow_cover[ id ] = c_snow_slab;
+				moresnow.snow_cover[ id ] = moresnow.c_snow_slab;
 
 			-- might be a stair
 			elseif( #nb == 2 ) then
@@ -109,7 +98,7 @@ moresnow.identify_stairs_and_slabs = function()
 				      and math.abs( c[ 4]-c[1]) >= 0.9
 				      and math.abs( c[10]-c[7]) >= 0.9 ) then
 
-					moresnow.snow_cover[ id ] = c_snow_stair;
+					moresnow.snow_cover[ id ] = moresnow.c_snow_stair;
 
 				-- moreblocks _outer:
 				elseif(   nb[1][1]==-0.5 and nb[1][2]==-0.5 and nb[1][3]==-0.5
@@ -117,9 +106,9 @@ moresnow.identify_stairs_and_slabs = function()
 				      and nb[2][1]==-0.5 and nb[2][2]== 0   and nb[2][3]== 0  
 				      and nb[2][4]== 0   and nb[2][5]== 0.5 and nb[2][6]== 0.5 ) then
 		
-					moresnow.snow_cover[ id ] = c_snow_outer_stair;
+					moresnow.snow_cover[ id ] = moresnow.c_snow_outer_stair;
 				else
-					moresnow.snow_cover[ id ] = c_snow_top;
+					moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 				end
 
 			-- moreblocks _inner:
@@ -133,9 +122,9 @@ moresnow.identify_stairs_and_slabs = function()
 				and nb[3][1]==-0.5 and nb[3][2]== 0   and nb[3][3]==-0.5
 				and nb[3][4]== 0   and nb[3][5]== 0.5 and nb[3][6]== 0 ) then
 
-				moresnow.snow_cover[ id ] = c_snow_inner_stair;
+				moresnow.snow_cover[ id ] = moresnow.c_snow_inner_stair;
 			else 
-				moresnow.snow_cover[ id ] = c_snow_top;
+				moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 			end
 
 		-- add snow to the bottom of the node below; it will look acceptable, provided there is a solid node below
@@ -143,7 +132,7 @@ moresnow.identify_stairs_and_slabs = function()
 		          and (   v.drawtype == 'fencelike' or v.drawtype=='plantlike'
 			       or v.drawtype == 'signlike'  or v.drawtype=='torchlike' )) then
 
-			moresnow.snow_cover[ id ] = c_snow_top;
+			moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 	
 		-- nodes where a snow cover would not fit (rails for example would get invisible)
 		elseif( v and v.drawtype
