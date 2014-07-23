@@ -7,21 +7,25 @@ moresnow = {}
 -- if set to true, fallen autum leaves will be supported just like snow
 -- The txture and idea for them came from LazyJ.
 moresnow.enable_autumnleaves = true
+-- wool is useful for covering stairs; turns them into benches;
+-- change this if you want the wool functionality only for a few nodes (i.e. only white - or none at all)
+moresnow.wool_dyes           =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
+                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"};
 -- the snow cannon allows to create snow
 moresnow.enable_snow_cannon  = true
 -- with this set, the snow cannon can *shoot* snowballs - which will fly a long way;
 -- on servers, set this to false
-moresnow.crazy_mode          = true
+moresnow.crazy_mode          = true 
 -- end of configuration
 --------------------------------------------------------------------------------
 
 -- defines the on_construct function for falling/placed snow(balls)
 dofile(minetest.get_modpath("moresnow")..'/snow_on_construct.lua');
+-- which snow node equivals which leaves node?
+moresnow.nodetypes = {'snow','autumnleaves'};
 -- devines the 8 types of snow covers: general nodebox snow cover, stairs, slabs,
 -- outer edge stair, inner edge stair, 3x homedecor shingles/technic cnc shapes
 dofile(minetest.get_modpath("moresnow")..'/snow_cover_nodes.lua');
--- which snow node equivals which leaves node?
-moresnow.nodetypes = {'snow','autumnleaves'};
 moresnow.build_translation_table();
 
 -- some defines which fascilitate identification of nodes

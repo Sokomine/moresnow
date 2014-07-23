@@ -43,12 +43,23 @@ end
 
 
 moresnow.on_construct_leaves = function(   pos, falling_node_name )
--- TODO: translate the result to the leaves nodes
 	if( not( falling_node_name )) then
 		falling_node_name = 'moresnow:autumnleaves';
 	end
 
 	local res = moresnow.on_construct( pos, falling_node_name, 'moresnow:autumnleaves', 'autumnleaves' );
+	if( res ) then
+		minetest.swap_node( pos, res );
+	end
+end
+
+
+moresnow.on_construct_wool = function(   pos, falling_node_name, color )
+	if( not( falling_node_name )) then
+		falling_node_name = 'moresnow:wool_'..color;
+	end
+
+	local res = moresnow.on_construct( pos, falling_node_name, 'moresnow:wool_'..color, 'wool_'..color );
 	if( res ) then
 		minetest.swap_node( pos, res );
 	end
