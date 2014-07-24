@@ -4,7 +4,7 @@ moresnow.translation_table = {}
 
 moresnow.build_translation_table = function()
 	local shapes    = {'top', 'stair_top', 'slab_top',
-				'outer_stair_top', 'inner_stair_top',
+				'panel_top', 'micro_top', 'outer_stair_top', 'inner_stair_top',
 				'ramp_top', 'ramp_outer_top', 'ramp_inner_top' };
 
 	for _,t in ipairs(moresnow.nodetypes) do 
@@ -110,9 +110,21 @@ moresnow.suggest_snow_type = function( node_content_id, p2 )
 		if(     p2 >= 4  and p2 <= 19 ) then
 			suggested = moresnow.c_snow_top;
 		-- slab turned upside down
-		elseif( p2 >= 20 and p2 <= 23 ) then
+		elseif( p2 >= 20 and p2 <= 24 ) then
 			suggested = moresnow.c_snow;
 		-- else it's a slab
+		end
+
+	elseif( suggested == moresnow.c_snow_panel ) then
+		-- vertical panel (mostly); can't be handled well; therefore, treat as a nodebox
+		if(     p2 >= 4  and p2 <= 24 ) then
+			suggested = moresnow.c_snow_top;
+		end
+			
+	elseif( suggested == moresnow.c_snow_micro ) then
+		-- microblocks in diffrent positions from the normal ones are too difficult
+		if(     p2 >= 4  and p2 <= 24 ) then
+			suggested = moresnow.c_snow_top;
 		end
 	
 	elseif( suggested == moresnow.c_snow_ramp_outer ) then
@@ -120,7 +132,7 @@ moresnow.suggest_snow_type = function( node_content_id, p2 )
 		if(     p2>=4    and p2 <= 19 ) then
 			suggested = moresnow.c_snow_top;
 		-- upside-down
-		elseif( p2 >= 20 and p2 <= 23 ) then
+		elseif( p2 >= 20 and p2 <= 24 ) then
 			suggested = moresnow.c_snow;
 		end
 	
@@ -129,11 +141,15 @@ moresnow.suggest_snow_type = function( node_content_id, p2 )
 		if(     p2>=4    and p2 <= 19 ) then
 			suggested = moresnow.c_snow_top;
 		-- upside-down
-		elseif( p2 >= 20 and p2 <= 23 ) then
+		elseif( p2 >= 20 and p2 <= 24 ) then
 			suggested = moresnow.c_snow;
 		end
 	end
 
+	-- c_snow_top does not have facedir
+	if( suggested == moresnow.c_snow_top ) then
+		p2 = 1;
+	end
 	return { new_id = suggested, param2 = p2 };
 end
 

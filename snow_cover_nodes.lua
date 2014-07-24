@@ -111,7 +111,7 @@ if( moresnow.enable_autumnleaves ) then
 	})
 end
 
-if( moresnow.enable_wool and minetest.get_modpath( 'wool' ) and moresnow.wool_dyes) then
+if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
         for _,v in ipairs( moresnow.wool_dyes ) do
                 table.insert( moresnow.nodetypes, 'wool_'..v );
 		minetest.register_node( "moresnow:wool_"..v, {
@@ -165,6 +165,23 @@ moresnow.register_snow_top( "slab_top", { {-0.5, -1.0, -0.5, 0.5, -1.0+2/16, 0.5
 
 -- these shapes exist in moreblocks only
 if( minetest.get_modpath( 'moreblocks' )) then
+	moresnow.register_snow_top( "panel_top", {
+				{-0.5,      -1.5,      -0.5,       0.5, -1.5+2/16,  0},
+				{-0.5,      -1.0,       0,         0.5, -1.0+2/16,  0.5},
+				{-0.5,      -1.5+2/16,    0-1/32,  0.5, -1.0,       0  },
+		},{ -- the wool version does not have the wool covering the legs
+				{-0.5,      -1.0,       0,         0.5, -1.0+2/16,  0.5},
+		});
+	moresnow.register_snow_top( "micro_top", {
+			        {-0.5, -1.5, -0.5,   0, -1.5+2/16, 0  },
+			        {-0.5, -1.0,    0,   0, -1.0+2/16, 0.5},
+			        {   0, -1.5, -0.5, 0.5, -1.5+2/16, 0.5},
+
+				{-0.5,      -1.5+2/16,    0-1/32,  0,   -1.0,       0  },
+				{0,         -1.5+2/16,    0,    0+1/32, -1.0,       0.5},
+		},{ -- the wool version does not have the wool covering the legs
+				{-0.5,      -1.0,       0,           0, -1.0+2/16,  0.5},
+		});
 	moresnow.register_snow_top( "outer_stair_top", {
 			        {-0.5, -1.0, -0.5,   0, -1.0+2/16, 0  },
 			        {-0.5, -0.5,    0,   0, -0.5+2/16, 0.5},

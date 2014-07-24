@@ -86,6 +86,34 @@ moresnow.identify_stairs_and_slabs = function()
 
 				moresnow.snow_cover[ id ] = moresnow.c_snow_slab;
 
+			-- panels (=half slabs)
+			elseif((#nb == 1
+			         and math.max( nb[1][2], nb[1][5])==0 
+				 and math.abs( nb[1][4] - nb[1][1] ) >= 0.9
+				 and math.abs( nb[1][6] - nb[1][3] ) <= 0.5 )
+		
+			    or ( type( nb[1] )~='table'
+				and #nb == 6
+				and math.max( nb[2], nb[5] )==0 
+				and math.abs( nb[4]-nb[1] ) >= 0.9 
+				and math.abs( nb[6]-nb[3] ) <= 0.5 ))  then
+
+				moresnow.snow_cover[ id ] = moresnow.c_snow_panel;
+
+			-- micro(blocks)
+			elseif((#nb == 1
+			         and math.max( nb[1][2], nb[1][5])==0 
+				 and math.abs( nb[1][4] - nb[1][1] ) >= 0.5
+				 and math.abs( nb[1][6] - nb[1][3] ) <= 0.5 )
+		
+			    or ( type( nb[1] )~='table'
+				and #nb == 6
+				and math.max( nb[2], nb[5] )==0 
+				and math.abs( nb[4]-nb[1] ) >= 0.5 
+				and math.abs( nb[6]-nb[3] ) <= 0.5 ))  then
+				
+				moresnow.snow_cover[ id ] = moresnow.c_snow_micro;
+
 			-- might be a stair
 			elseif( #nb == 2 ) then
 				local c = { math.min( nb[1][1], nb[1][4] ), math.min( nb[1][2], nb[1][5] ), math.min( nb[1][3], nb[1][4] ),
