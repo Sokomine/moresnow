@@ -71,7 +71,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 					fixed = wool_nodebox,
 			},
 			drop =  "moresnow:wool_"..v, 
-			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1,falling_node=1, float=1, not_in_creative_inventory=1}, 
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, not_in_creative_inventory=1}, 
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
@@ -137,7 +137,7 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 					},
 			},
 	
-			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1,falling_node=1, float=1},
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1},
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
