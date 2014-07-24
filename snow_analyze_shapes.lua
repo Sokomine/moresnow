@@ -59,6 +59,11 @@ moresnow.identify_stairs_and_slabs = function()
 
 			-- do nothing; the node has been dealt with
 
+		elseif( v.drawtype and v.drawtype == 'fencelike' ) then
+
+			moresnow.snow_cover[ id ] = moresnow.c_snow_fence;
+
+
 		elseif( n and minetest.registered_nodes[ n ]
 		      and minetest.registered_nodes[ n ].drop 
 		      and minetest.registered_nodes[ n ].drop == 'default:snow' ) then

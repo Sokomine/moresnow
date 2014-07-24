@@ -3,7 +3,7 @@
 moresnow.translation_table = {}
 
 moresnow.build_translation_table = function()
-	local shapes    = {'top', 'stair_top', 'slab_top',
+	local shapes    = {'top', 'fence_top', 'stair_top', 'slab_top',
 				'panel_top', 'micro_top', 'outer_stair_top', 'inner_stair_top',
 				'ramp_top', 'ramp_outer_top', 'ramp_inner_top' };
 

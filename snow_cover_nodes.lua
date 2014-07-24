@@ -150,6 +150,9 @@ minetest.registered_nodes[ 'default:snow' ].on_construct = function( pos )
 -- thus, nodebox-like nodes covered by snow may look less strange
 moresnow.register_snow_top( "top", {{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5}}, 
                                    {{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5}} ); -- same for wool 
+moresnow.register_snow_top( "fence_top", {{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5},
+                                          {-0.12, -0.5, -0.12,  0.12, -0.5+2/16, 0.12}}, -- on top of the fence post 
+                                         {{-0.5, -1.5, -0.5,  0.5, -1.5+2/16, 0.5}} ); -- same for wool 
 moresnow.register_snow_top( "stair_top", {
 				{-0.5,      -1.0,      -0.5,       0.5, -1.0+2/16,  0},
 				{-0.5,      -0.5,       0,         0.5, -0.5+2/16,  0.5},

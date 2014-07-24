@@ -33,6 +33,7 @@ moresnow.c_ignore           = minetest.get_content_id( 'ignore' );
 moresnow.c_air              = minetest.get_content_id( 'default:snow' );
 moresnow.c_snow             = minetest.get_content_id( 'default:snow' );
 moresnow.c_snow_top         = minetest.get_content_id( 'moresnow:snow_top' );
+moresnow.c_snow_fence       = minetest.get_content_id( 'moresnow:snow_fence_top' );
 moresnow.c_snow_stair       = minetest.get_content_id( 'moresnow:snow_stair_top' );
 moresnow.c_snow_slab        = minetest.get_content_id( 'moresnow:snow_slab_top' );
 moresnow.c_snow_panel       = minetest.get_content_id( 'moresnow:snow_panel_top' );
