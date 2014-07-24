@@ -33,9 +33,9 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 	if( moresnow.enable_autumnleaves ) then
 	   minetest.register_node( 'moresnow:autumnleaves_'..node_name, {
 		description = "fallen leaves",
-		tiles = {"moreautumn.png"},
-		inventory_image = "moreautumn.png",
-		wield_image = "moreautumn.png",
+		tiles = {"moresnow_autumnleaves.png"},
+		inventory_image = "moresnow_autumnleaves.png",
+		wield_image = "moresnow_autumnleaves.png",
 		is_ground_content = true,
 		paramtype = "light",
 		paramtype2 = "facedir",
@@ -60,8 +60,8 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 		minetest.register_node( "moresnow:wool_"..v.."_"..node_name, {
 			description = "layers of wool ("..v..")",
 			tiles = {"wool_"..v..".png"},
---			inventory_image = "moreautumn.png",
---			wield_image = "moreautumn.png",
+--			inventory_image = "moresnow_autumnleaves.png",
+--			wield_image = "moresnow_autumnleaves.png",
 			is_ground_content = true,
 			paramtype = "light",
 			paramtype2 = "facedir",
@@ -86,9 +86,9 @@ end
 if( moresnow.enable_autumnleaves ) then
 	minetest.register_node( "moresnow:autumnleaves", {
 		description = "fallen leaves",
-		tiles = {"moreautumn.png"},
-		inventory_image = "moreautumn.png",
-		wield_image = "moreautumn.png",
+		tiles = {"moresnow_autumnleaves.png"},
+		inventory_image = "moresnow_autumnleaves.png",
+		wield_image = "moresnow_autumnleaves.png",
 		is_ground_content = true,
 		paramtype = "light",
 --		drawtype = "allfaces_optional",
@@ -124,8 +124,6 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 		minetest.register_node( "moresnow:wool_"..v, {
 			description = "layers of wool ("..v..")",
 			tiles = {"wool_"..v..".png"},
---			inventory_image = "moreautumn.png",
---			wield_image = "moreautumn.png",
 			is_ground_content = true,
 			paramtype = "light",
 			leveled = 7, -- can pile up as well
