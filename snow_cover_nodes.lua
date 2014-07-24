@@ -109,6 +109,13 @@ if( moresnow.enable_autumnleaves ) then
 			return moresnow.on_construct_leaves( pos, 'moresnow:autumnleaves' );
 		end,
 	})
+
+	-- craft one leaves block into 9 layers
+	minetest.register_craft({
+			output = 'moresnow:autumnleaves 9',
+			recipe = { {'default:leaves'}
+		}});
+	-- there is no inverse craft receipe for them as leaves are not particulary rare
 end
 
 if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
@@ -137,6 +144,21 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 				return moresnow.on_construct_wool( pos, 'moresnow:wool_'..v, v );
 			end,
 		});
+
+		-- craft one wool block into 9 layers
+		minetest.register_craft({
+			output = 'moresnow:wool_'..v..' 9',
+			recipe = { {'wool:'..v}
+			}});
+
+		-- craft the wool layers back to a full wool block
+		minetest.register_craft({
+			output = 'wool:'..v,
+			recipe = {
+				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
+				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
+				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
+			}});
         end
 end
 
