@@ -30,7 +30,7 @@ moresnow.build_translation_table();
 
 -- some defines which fascilitate identification of nodes
 moresnow.c_ignore           = minetest.get_content_id( 'ignore' );
-moresnow.c_air              = minetest.get_content_id( 'default:snow' );
+moresnow.c_air              = minetest.get_content_id( 'air' );
 moresnow.c_snow             = minetest.get_content_id( 'default:snow' );
 moresnow.c_snow_top         = minetest.get_content_id( 'moresnow:snow_top' );
 moresnow.c_snow_fence       = minetest.get_content_id( 'moresnow:snow_fence_top' );
