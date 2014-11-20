@@ -172,9 +172,9 @@ moresnow.identify_stairs_and_slabs = function()
 		          and (   v.drawtype == 'airlike'   or v.drawtype=='liquid'   
 			       or v.drawtype == 'raillike'  or v.drawtype=='flowingliquid' )) then
 
-			moresnow.snow_cover[ id ] = c_air;
+			moresnow.snow_cover[ id ] = moresnow.c_air;
 		else
-			moresnow.snow_cover[ id ] = c_snow;
+			moresnow.snow_cover[ id ] = moresnow.c_snow;
 		end
 	end
 end
