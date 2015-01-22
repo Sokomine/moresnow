@@ -19,7 +19,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 			fixed = fixed_nodebox,
 		},
 		drop = "default:snow",
-		groups = {crumbly=3,falling_node=1, melts=1, float=1, not_in_creative_inventory=1},
+		groups = {crumbly=3,falling_node=1, float=1, melt=1, not_in_creative_inventory=1},
 		sounds = default.node_sound_dirt_defaults({
 			footstep = {name="default_snow_footstep", gain=0.25},
 			dug = {name="default_snow_footstep", gain=0.75},
@@ -282,4 +282,56 @@ if(    minetest.get_modpath( 'homedecor' )
 	moresnow.register_shape( 2, 'ramp_outer_top');
 	moresnow.register_shape( 3, 'ramp_inner_top');
 end
+
+
+minetest.register_node( 'moresnow:autumnleaves_tree', {
+	description = "autumn leaves",
+	tiles = {"moresnow_autumnleaves.png"},
+	drawtype = "allfaces_optional",
+	waving = 1,
+	visual_scale = 1.3,
+	paramtype = "light",
+	is_ground_content = false,
+	groups = {snappy=3, leafdecay=3, flammable=2, leaves=1},
+        sounds = default.node_sound_leaves_defaults(),
+})
+
+minetest.register_node( 'moresnow:winterleaves_tree', {
+	description = "winter leaves",
+	tiles = {"moresnow_winterleaves.png"},
+	drawtype = "allfaces_optional",
+	waving = 1,
+	visual_scale = 1.3,
+	paramtype = "light",
+	is_ground_content = false,
+	groups = {snappy=3, leafdecay=3, flammable=2, leaves=1},
+        sounds = default.node_sound_leaves_defaults(),
+})
+
+minetest.register_node("moresnow:snow_soil", {
+	description = "Snow on soil",
+	tiles = {"default_snow.png^farming_soil_wet.png"},
+	is_ground_content = true,
+	paramtype = "light",
+	buildable_to = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5,  0.5, -0.5+2/16, 0.5},
+		},
+	},
+	groups = {crumbly=3,falling_node=1},
+	sounds = default.node_sound_dirt_defaults({
+		footstep = {name="default_snow_footstep", gain=0.25},
+		dug = {name="default_snow_footstep", gain=0.75},
+	}),
+
+	on_construct = function(pos)
+		pos.y = pos.y - 1
+		if minetest.get_node(pos).name == "default:dirt_with_grass" then
+			minetest.set_node(pos, {name="default:dirt_with_snow"})
+		end
+	end,
+})
 
