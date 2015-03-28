@@ -223,6 +223,9 @@ moresnow.on_construct = function( pos, falling_node_name, default_name, node_typ
 			return;
 		-- the falling node was not default:snow (or an aequivalent); but we need default:snow here
 		elseif( node0 and node0.name and node0.name ~= default_name) then
+			if( not( minetest.registered_nodes[ default_name ] ) or default_name=='ignore') then
+				return;
+			end
 			return { name = default_name, param2 = 0 };
 		-- fallback
 		else
@@ -238,6 +241,9 @@ moresnow.on_construct = function( pos, falling_node_name, default_name, node_typ
 	end
 	local suggested = minetest.get_name_from_content_id( res.new_id );
 	if( node0 and node0.name and (node0.name ~= suggested or ( suggested ~= default_name and node0.param2 and node0.param2 ~= res.param2))) then
+		if( not( minetest.registered_nodes[ suggested ] ) or suggested=='ignore') then
+			return;
+		end
 		return { name = suggested, param2 = res.param2};
 	end
 end
