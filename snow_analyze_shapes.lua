@@ -181,3 +181,9 @@ end
 
 -- search for stairs and slabs after all nodes have been generated
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
+
+-- no snow on lava or flowing water
+moresnow.snow_cover[ minetest.get_content_id( 'default:lava_source')        ] = moresnow.c_air;
+moresnow.snow_cover[ minetest.get_content_id( 'default:lava_flowing')       ] = moresnow.c_air;
+moresnow.snow_cover[ minetest.get_content_id( 'default:water_flowing')      ] = moresnow.c_air;
+moresnow.snow_cover[ minetest.get_content_id( 'default:river_water_flowing')] = moresnow.c_air;
