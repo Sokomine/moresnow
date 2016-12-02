@@ -171,7 +171,8 @@ moresnow.identify_stairs_and_slabs = function()
 		-- add snow to the bottom of the node below; it will look acceptable, provided there is a solid node below
 		elseif( v and v.drawtype
 		          and (   v.drawtype == 'fencelike' or v.drawtype=='plantlike'
-			       or v.drawtype == 'signlike'  or v.drawtype=='torchlike' )) then
+			       or v.drawtype == 'signlike'  or v.drawtype=='torchlike'
+                               or v.drawtype == 'mesh' )) then
 
 			moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 	
