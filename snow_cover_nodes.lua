@@ -116,12 +116,35 @@ if( moresnow.enable_autumnleaves ) then
 		end,
 	})
 
-	-- craft one leaves block into 9 layers
+	-- full leaves blocks for decorative autumn trees
+	minetest.register_craft({
+			type = "shapeless",
+			output = 'moresnow:autumnleaves_tree',
+			recipe = {'default:leaves','default:torch'},
+			replacements = {{'default:torch','default:torch'}}
+		});
+
+	-- 9 layers of autumn leaves
 	minetest.register_craft({
 			output = 'moresnow:autumnleaves 9',
-			recipe = { {'default:leaves'}
+			recipe = { {'moresnow:autumnleaves_tree'}
 		}});
-	-- there is no inverse craft receipe for them as leaves are not particulary rare
+
+	-- reverse craft
+	minetest.register_craft({
+			output = 'moresnow:autumnleaves_tree',
+			recipe = { {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'},
+			           {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'},
+			           {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'}
+		}});
+
+	-- white/grey leaves for trees in winter
+	minetest.register_craft({
+			type = "shapeless",
+			output = 'moresnow:winterleaves_tree',
+			recipe = {'moresnow:autumnleaves_tree','default:snow'},
+			replacements = {{'default:snow','default:snow'}}
+		});
 end
 
 if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
