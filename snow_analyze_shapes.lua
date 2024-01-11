@@ -63,8 +63,11 @@ moresnow.identify_stairs_and_slabs = function()
 		elseif(( v.drawtype and v.drawtype == 'fencelike' )
                     or ( v.groups and v.groups.fence and v.groups.fence > 0))  then
 
+			-- raillike fences; they have no post on which we may put snow
+			if(string.find(n, "rail")) then
+				moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 			-- new fences
-			if( not( v.on_rightclick)) then
+			elseif( not( v.on_rightclick)) then
 				moresnow.snow_cover[ id ] = moresnow.c_snow_fence;
 			-- gates; they only get snow at the bottom
 			else
