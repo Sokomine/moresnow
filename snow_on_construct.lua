@@ -8,8 +8,12 @@ moresnow.build_translation_table = function()
 		moresnow.translation_table[ t ] = {};
 
 		for _,v in ipairs( moresnow.shapes ) do
-			local id1 = moresnow.get_cid( 'moresnow:snow_'..v )
-			local id2 = moresnow.get_cid( 'moresnow:'..t..'_'..v )
+			local suffix = '_top'
+			if(v == 'top') then
+				suffix = ''
+			end
+			local id1 = moresnow.get_cid( 'moresnow:snow_'..v..suffix )
+			local id2 = moresnow.get_cid( 'moresnow:'..t..'_'..v..suffix )
 			if( id1 ) then 
 				moresnow.translation_table[ t ][ id1 ] = id2;
 			end
