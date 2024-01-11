@@ -19,30 +19,39 @@ moresnow.crazy_mode          = true
 -- end of configuration
 --------------------------------------------------------------------------------
 
+-- which shapes can we cover?
+moresnow.shapes = {'top', 'fence_top', 'stair_top', 'slab_top',
+			'panel_top', 'micro_top', 'outer_stair_top', 'inner_stair_top',
+			'ramp_top', 'ramp_outer_top', 'ramp_inner_top'}
+
+-- which snow node equivals which leaves node?
+moresnow.nodetypes = {'snow','autumnleaves'}
+
+-- adjustment for an annoying breaking change in the lua api
+moresnow.get_cid = function(node_name)
+	if(not(node_name)
+	  or (not(minetest.registered_nodes[node_name]) and not(minetest.registered_aliases[node_name]))) then
+		return nil
+	end
+	return minetest.get_content_id(node_name)
+end
+
 -- defines the on_construct function for falling/placed snow(balls)
 dofile(minetest.get_modpath("moresnow")..'/snow_on_construct.lua');
--- which snow node equivals which leaves node?
-moresnow.nodetypes = {'snow','autumnleaves'};
 -- devines the 8 types of snow covers: general nodebox snow cover, stairs, slabs,
 -- outer edge stair, inner edge stair, 3x homedecor shingles/technic cnc shapes
 dofile(minetest.get_modpath("moresnow")..'/snow_cover_nodes.lua');
 moresnow.build_translation_table();
 
 -- some defines which fascilitate identification of nodes
-moresnow.c_ignore           = minetest.get_content_id( 'ignore' );
-moresnow.c_air              = minetest.get_content_id( 'air' );
-moresnow.c_snow             = minetest.get_content_id( 'default:snow' );
-moresnow.c_snow_top         = minetest.get_content_id( 'moresnow:snow_top' );
-moresnow.c_snow_fence       = minetest.get_content_id( 'moresnow:snow_fence_top' );
-moresnow.c_snow_stair       = minetest.get_content_id( 'moresnow:snow_stair_top' );
-moresnow.c_snow_slab        = minetest.get_content_id( 'moresnow:snow_slab_top' );
-moresnow.c_snow_panel       = minetest.get_content_id( 'moresnow:snow_panel_top' );
-moresnow.c_snow_micro       = minetest.get_content_id( 'moresnow:snow_micro_top' );
-moresnow.c_snow_outer_stair = minetest.get_content_id( 'moresnow:snow_outer_stair_top' );
-moresnow.c_snow_inner_stair = minetest.get_content_id( 'moresnow:snow_inner_stair_top' );
-moresnow.c_snow_ramp_top    = minetest.get_content_id( 'moresnow:snow_ramp_top' );
-moresnow.c_snow_ramp_outer  = minetest.get_content_id( 'moresnow:snow_ramp_outer_top' );
-moresnow.c_snow_ramp_inner  = minetest.get_content_id( 'moresnow:snow_ramp_inner_top' );
+moresnow.c_ignore           = moresnow.get_cid( 'ignore' );
+moresnow.c_air              = moresnow.get_cid( 'air' );
+moresnow.c_snow             = moresnow.get_cid( 'default:snow' );
+-- create some suitable aliases
+for _, v in ipairs(moresnow.shapes) do
+	moresnow['c_snow_'..v] = moresnow.get_cid('moresnow:snow_'..v)
+end
+
 
 -- takes a look at all defined nodes after startup and stores which shape they are;
 -- this is important for finding the right snow cover to put on the shape below

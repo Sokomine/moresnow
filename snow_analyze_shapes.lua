@@ -10,7 +10,7 @@ moresnow.snow_param2_offset = {};
 -- homedecor 3d shingles and technic cnc items are handled here
 moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic_postfix, param2_offset )
 	-- these nodes are only supported if homedecor and/or technic are installed
-	local c_new_snow_node = minetest.get_content_id( new_name );
+	local c_new_snow_node = moresnow.get_cid( new_name )
 	if( not( c_new_snow_node )) then
 		return;
 	end
@@ -20,7 +20,7 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 					'tree','steelblock','bronzeblock','stainless_steel','marble','granite'};
 
 	for _,v in ipairs( homedecor_materials ) do
-		local id = minetest.get_content_id( homedecor_prefix..v );
+		local id = moresnow.get_cid( homedecor_prefix..v )
 		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
 		if( id and id ~= moresnow.c_ignore ) then
 			moresnow.snow_cover[ id ] = c_new_snow_node;
@@ -32,7 +32,7 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 			prefix = 'technic:';
 		end
 
-		local id = minetest.get_content_id( prefix..v..technic_postfix );
+		local id = moresnow.get_cid( prefix..v..technic_postfix )
 		-- the node has to be registered at this point; thus, the soft-dependency on homedecor and technic
 		if( id and id ~= moresnow.c_ignore ) then
 			moresnow.snow_cover[                 id ] = c_new_snow_node;
@@ -53,7 +53,7 @@ moresnow.identify_stairs_and_slabs = function()
 
 	for n,v in pairs( minetest.registered_nodes ) do
 
-		local id = minetest.get_content_id( n );
+		local id = moresnow.get_cid( n )
 
 		if( not( id ) or moresnow.snow_cover[ id ] ) then
 
@@ -192,7 +192,7 @@ end
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
 
 -- no snow on lava or flowing water
-moresnow.snow_cover[ minetest.get_content_id( 'default:lava_source')        ] = moresnow.c_air;
-moresnow.snow_cover[ minetest.get_content_id( 'default:lava_flowing')       ] = moresnow.c_air;
-moresnow.snow_cover[ minetest.get_content_id( 'default:water_flowing')      ] = moresnow.c_air;
-moresnow.snow_cover[ minetest.get_content_id( 'default:river_water_flowing')] = moresnow.c_air;
+moresnow.snow_cover[ moresnow.get_cid( 'default:lava_source')        ] = moresnow.c_air
+moresnow.snow_cover[ moresnow.get_cid( 'default:lava_flowing')       ] = moresnow.c_air
+moresnow.snow_cover[ moresnow.get_cid( 'default:water_flowing')      ] = moresnow.c_air
+moresnow.snow_cover[ moresnow.get_cid( 'default:river_water_flowing')] = moresnow.c_air
