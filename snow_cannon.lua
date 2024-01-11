@@ -10,7 +10,7 @@ moresnow.throw_snowball = function( pos, dir, player )
 	local snowball_VELOCITY=19
 
 	if( player ) then
-		pos = player:getpos();
+		pos = player:get_pos();
 		dir = player:get_look_dir();
 		pos.y = pos.y + 1.5;
 	elseif( not( dir )) then
@@ -25,8 +25,8 @@ moresnow.throw_snowball = function( pos, dir, player )
 	local obj = core.add_entity( pos, "__builtin:falling_node")
 	obj:get_luaentity():set_node( { name = 'default:snow'});
 
-	obj:setvelocity({x=dir.x*snowball_VELOCITY, y=dir.y*snowball_VELOCITY, z=dir.z*snowball_VELOCITY})
-	obj:setacceleration({x=dir.x*-3, y=-snowball_GRAVITY, z=dir.z*-3})
+	obj:set_velocity({x=dir.x*snowball_VELOCITY, y=dir.y*snowball_VELOCITY, z=dir.z*snowball_VELOCITY})
+	obj:set_acceleration({x=dir.x*-3, y=-snowball_GRAVITY, z=dir.z*-3})
 end
 
 
