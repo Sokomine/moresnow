@@ -47,6 +47,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 		paramtype2 = "facedir",
 		buildable_to = true,
 		drawtype = "nodebox",
+		use_texture_alpha = true,
 		node_box = {
 			-- leveled would not work well in this situation
 			type = "fixed",
