@@ -233,7 +233,10 @@ if( minetest.get_modpath( 'moreblocks' )) then
 				{0,         -1.5+moresnow.snow_ground_height,    0,    0+1/32, -1.0,       0.5},
 		},{ -- the wool version does not have the wool covering the legs
 				{-0.5,      -1.0,       0,           0, -1.0+moresnow.wool_ground_height,  0.5},
-		});
+		})
+end
+
+if( minetest.get_modpath( 'moreblocks' ) or minetest.registered_nodes["stairs:stair_outer_wood"]) then
 	moresnow.register_snow_top( "outer_stair_top", {
 			        {-0.5, -1.0, -0.5,   0, -1.0+moresnow.snow_ground_height, 0  },
 			        {-0.5, -0.5,    0,   0, -0.5+moresnow.snow_ground_height, 0.5},
@@ -251,7 +254,9 @@ if( minetest.get_modpath( 'moreblocks' )) then
 
 				{-0.5,      -1.0+moresnow.wool_ground_height,    0-1/32,  0,   -0.5,       0  },
 				{0,         -1.0+moresnow.wool_ground_height,    0,    0+1/32, -0.5,       0.5},
-		});
+		})
+end
+if( minetest.get_modpath( 'moreblocks' ) or minetest.registered_nodes["stairs:stair_inner_wood"]) then
 	moresnow.register_snow_top( "inner_stair_top", {
 			        {   0, -1.0, -0.5, 0.5, -1.0+moresnow.snow_ground_height, 0  },
 
@@ -268,7 +273,7 @@ if( minetest.get_modpath( 'moreblocks' )) then
 
 				{   0,      -1.0+moresnow.wool_ground_height,  0-1/32, 0.5,    -0.5,       0 },
 				{   0,      -1.0+moresnow.wool_ground_height, -0.5,    0+1/32, -0.5,        0},
-		});
+		})
 end
 
 
