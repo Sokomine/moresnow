@@ -20,9 +20,9 @@ moresnow.crazy_mode          = true
 --------------------------------------------------------------------------------
 
 -- which shapes can we cover?
-moresnow.shapes = {'top', 'fence_top', 'stair_top', 'slab_top',
-			'panel_top', 'micro_top', 'outer_stair_top', 'inner_stair_top',
-			'ramp_top', 'ramp_outer_top', 'ramp_inner_top'}
+moresnow.shapes = {'top', 'fence', 'stair', 'slab',
+			'panel', 'micro', 'outer_stair', 'inner_stair',
+			'ramp', 'ramp_outer', 'ramp_inner'}
 
 -- which snow node equivals which leaves node?
 moresnow.nodetypes = {'snow','autumnleaves'}
@@ -51,7 +51,11 @@ moresnow.c_air              = moresnow.get_cid( 'air' );
 moresnow.c_snow             = moresnow.get_cid( 'default:snow' );
 -- create some suitable aliases
 for _, v in ipairs(moresnow.shapes) do
-	moresnow['c_snow_'..v] = moresnow.get_cid('moresnow:snow_'..v)
+	local suffix = '_top'
+	if(v == 'top') then
+		suffix = ''
+	end
+	moresnow['c_snow_'..v] = moresnow.get_cid('moresnow:snow_'..v..suffix)
 end
 
 
