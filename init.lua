@@ -36,13 +36,13 @@ moresnow.get_cid = function(node_name)
 	return minetest.get_content_id(node_name)
 end
 
-local modpath = minetest.get_modpath("moresnow")
+local modpath = minetest.get_modpath("moresnow")..DIR_DELIM
 
 -- defines the on_construct function for falling/placed snow(balls)
-dofile(modpath..'/snow_on_construct.lua');
+dofile(modpath..'snow_on_construct.lua');
 -- devines the 8 types of snow covers: general nodebox snow cover, stairs, slabs,
 -- outer edge stair, inner edge stair, 3x homedecor shingles/technic cnc shapes
-dofile(modpath..'/snow_cover_nodes.lua');
+dofile(modpath..'snow_cover_nodes.lua');
 moresnow.build_translation_table();
 
 -- some defines which fascilitate identification of nodes
@@ -57,9 +57,9 @@ end
 
 -- takes a look at all defined nodes after startup and stores which shape they are;
 -- this is important for finding the right snow cover to put on the shape below
-dofile(modpath..'/snow_analyze_shapes.lua');
+dofile(modpath..'snow_analyze_shapes.lua');
 -- a snow cannon that shoots snow around
 if( moresnow.enable_snow_cannon ) then
-	dofile(modpath..'/snow_cannon.lua');
+	dofile(modpath..'snow_cannon.lua');
 end
 
