@@ -2,12 +2,17 @@
 -- default:snow got higher in recent versions of mtg: it is now 4/16 high
 moresnow.snow_ground_height = 4/16;
 -- leaves are usually not that thick
-moresnow.leaves_ground_height = 2/16;
+moresnow.leaves_ground_height = 1/32;
 -- neither is wool
 moresnow.wool_ground_height = 2/16;
 
+-- make it a bit shorter...
+local height_snow = moresnow.snow_ground_height
+local height_leaves = moresnow.leaves_ground_height
+local height_wool = moresnow.wool_ground_height
+
 -- the general node definition for all these snow tops (only name and nodebox vary)
-moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
+moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, leaves_nodebox )
 	minetest.register_node( 'moresnow:snow_'..node_name, {
 		description = "Snow",
 		tiles = {"default_snow.png"},  
@@ -51,7 +56,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox )
 		node_box = {
 			-- leveled would not work well in this situation
 			type = "fixed",
-			fixed = fixed_nodebox,
+			fixed = leaves_nodebox or wool_nodebox or fixed_nodebox,
 		},
 		drop = "moresnow:autumnleaves",
 		groups = {falling_node=1, float=1, not_in_creative_inventory=1, snappy=3, flammable=2, leaves=1, not_in_creative_inventory=1},
@@ -99,14 +104,15 @@ if( moresnow.enable_autumnleaves ) then
 		is_ground_content = true,
 		paramtype = "light",
 --		drawtype = "allfaces_optional",
-		waving = 1,
+--		waving = 0, -- waving looks too strange here!
+		use_texture_alpha = true,
 		buildable_to = true,
 		leveled = 7, -- can pile up as well
 		drawtype = "nodebox",
 		node_box = {
-				type = "leveled",
+				type = "fixed",
 				fixed = {
-						{-0.5, -0.5, -0.5,  0.5, -0.5+moresnow.leaves_ground_height, 0.5},
+						{-0.5, -0.5, -0.5,  0.5, -0.5+height_leaves, 0.5},
 				},
 		},
 
@@ -161,7 +167,7 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 			node_box = {
 					type = "leveled",
 					fixed = {
-							{-0.5, -0.5, -0.5,  0.5, -0.5+moresnow.wool_ground_height, 0.5},
+							{-0.5, -0.5, -0.5,  0.5, -0.5+height_wool, 0.5},
 					},
 			},
 	
@@ -198,82 +204,120 @@ minetest.registered_nodes[ 'default:snow' ].on_construct = function( pos )
 
 -- the nodebox for this snow node lies one node DEEPER than the node the snow is in;
 -- thus, nodebox-like nodes covered by snow may look less strange
-moresnow.register_snow_top( "top", {{-0.5, -1.5, -0.5,  0.5, -1.5+moresnow.snow_ground_height, 0.5}},
-                                   {{-0.5, -1.5, -0.5,  0.5, -1.5+moresnow.wool_ground_height, 0.5}} ); -- same for wool
-moresnow.register_snow_top( "fence_top", {{-0.5, -1.5, -0.5,  0.5, -1.5+moresnow.snow_ground_height, 0.5},
+moresnow.register_snow_top( "top", {{-0.5, -1.5, -0.5,  0.5, -1.5+height_snow, 0.5}},
+                                   {{-0.5, -1.5, -0.5,  0.5, -1.5+height_wool, 0.5}}, -- same for wool
+                                   {{-0.5, -1.5, -0.5,  0.5, -1.5+height_leaves, 0.5}} );
+moresnow.register_snow_top( "fence_top", {{-0.5, -1.5, -0.5,  0.5, -1.5+height_snow, 0.5},
                                           {-0.12, -0.5, -0.12,  0.12, -0.5+2/16, 0.12}}, -- on top of the fence post
-                                         {{-0.5, -1.5, -0.5,  0.5, -1.5+moresnow.wool_ground_height, 0.5}} ); -- same for wool
+                                         {{-0.5, -1.5, -0.5,  0.5, -1.5+height_wool, 0.5}},  -- same for wool
+					 {{-0.5, -1.5, -0.5,  0.5, -1.5+height_leaves, 0.5},
+                                          {-0.12, -0.5, -0.12,  0.12, -0.5+height_leaves, 0.12}}) -- on top of the fence post
 moresnow.register_snow_top( "stair_top", {
-				{-0.5,      -1.0,      -0.5,       0.5, -1.0+moresnow.snow_ground_height,  0},
-				{-0.5,      -0.5,       0,         0.5, -0.5+moresnow.snow_ground_height,  0.5},
-				{-0.5,      -1.0+moresnow.snow_ground_height,    0-1/32,  0.5, -0.5,       0  },
+				{-0.5,      -1.0,      -0.5,       0.5, -1.0+height_snow,  0},
+				{-0.5,      -0.5,       0,         0.5, -0.5+height_snow,  0.5},
+				{-0.5,      -1.0+height_snow,    0-1/32,  0.5, -0.5,       0  },
 				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
 		},{ -- the wool version does not have the wool covering the legs
-				{-0.5,      -1.0,      -0.5,       0.5, -1.0+moresnow.wool_ground_height,  0},
-				{-0.5,      -0.5,       0,         0.5, -0.5+moresnow.wool_ground_height,  0.5},
-				{-0.5,      -1.0+moresnow.wool_ground_height,    0-1/32,  0.5, -0.5,       0  },
-		});
-moresnow.register_snow_top( "slab_top", { {-0.5, -1.0, -0.5, 0.5, -1.0+moresnow.snow_ground_height, 0.5}},
-                                        { {-0.5, -1.0, -0.5, 0.5, -1.0+moresnow.wool_ground_height, 0.5}}); -- same for wool
+				{-0.5,      -1.0,      -0.5,       0.5, -1.0+height_wool,  0},
+				{-0.5,      -0.5,       0,         0.5, -0.5+height_wool,  0.5},
+				{-0.5,      -1.0+height_wool,    0-1/32,  0.5, -0.5,       0  },
+		},{ -- the leaves version covers the legs
+				{-0.5,      -1.0,      -0.5,       0.5, -1.0+height_leaves,  0},
+				{-0.5,      -0.5,       0,         0.5, -0.5+height_leaves,  0.5},
+				{-0.5,      -1.0+height_leaves,    0-1/32,  0.5, -0.5,       0  },
+				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
+		})
+moresnow.register_snow_top( "slab_top", { {-0.5, -1.0, -0.5, 0.5, -1.0+height_snow, 0.5}},
+                                        { {-0.5, -1.0, -0.5, 0.5, -1.0+height_wool, 0.5}}, -- same for wool
+                                        { {-0.5, -1.0, -0.5, 0.5, -1.0+height_leaves, 0.5}}) -- same for wool
 
 -- these shapes exist in moreblocks only
 if( minetest.get_modpath( 'moreblocks' )) then
 	moresnow.register_snow_top( "panel_top", {
-				{-0.5,      -1.5,      -0.5,       0.5, -1.5+moresnow.snow_ground_height,  0},
-				{-0.5,      -1.0,       0,         0.5, -1.0+moresnow.snow_ground_height,  0.5},
-				{-0.5,      -1.5+moresnow.snow_ground_height,    0-1/32,  0.5, -1.0,       0  },
+				{-0.5,      -1.5,      -0.5,       0.5, -1.5+height_snow,  0},
+				{-0.5,      -1.0,       0,         0.5, -1.0+height_snow,  0.5},
+				{-0.5,      -1.5+height_snow,    0-1/32,  0.5, -1.0,       0  },
 		},{ -- the wool version does not have the wool covering the legs
-				{-0.5,      -1.0,       0,         0.5, -1.0+moresnow.wool_ground_height,  0.5},
-		});
+				{-0.5,      -1.0,       0,         0.5, -1.0+height_wool,  0.5},
+		},{ -- the leaves version covers the legs
+				{-0.5,      -1.5,      -0.5,       0.5, -1.5+height_leaves,  0},
+				{-0.5,      -1.0,       0,         0.5, -1.0+height_leaves,  0.5},
+				{-0.5,      -1.5+height_leaves,    0-1/32,  0.5, -1.0,       0  },
+		})
 	moresnow.register_snow_top( "micro_top", {
-			        {-0.5, -1.5, -0.5,   0, -1.5+moresnow.snow_ground_height, 0  },
-			        {-0.5, -1.0,    0,   0, -1.0+moresnow.snow_ground_height, 0.5},
-			        {   0, -1.5, -0.5, 0.5, -1.5+moresnow.snow_ground_height, 0.5},
+			        {-0.5, -1.5, -0.5,   0, -1.5+height_snow, 0  },
+			        {-0.5, -1.0,    0,   0, -1.0+height_snow, 0.5},
+			        {   0, -1.5, -0.5, 0.5, -1.5+height_snow, 0.5},
 
-				{-0.5,      -1.5+moresnow.snow_ground_height,    0-1/32,  0,   -1.0,       0  },
-				{0,         -1.5+moresnow.snow_ground_height,    0,    0+1/32, -1.0,       0.5},
+				{-0.5,      -1.5+height_snow,    0-1/32,  0,   -1.0,       0  },
+				{0,         -1.5+height_snow,    0,    0+1/32, -1.0,       0.5},
 		},{ -- the wool version does not have the wool covering the legs
-				{-0.5,      -1.0,       0,           0, -1.0+moresnow.wool_ground_height,  0.5},
+				{-0.5,      -1.0,       0,           0, -1.0+height_wool,  0.5},
+		},{ -- leaves again with legs
+			        {-0.5, -1.5, -0.5,   0, -1.5+height_leaves, 0  },
+			        {-0.5, -1.0,    0,   0, -1.0+height_leaves, 0.5},
+			        {   0, -1.5, -0.5, 0.5, -1.5+height_leaves, 0.5},
+
+				{-0.5,      -1.5+height_leaves,    0-1/32,  0,   -1.0,       0  },
+				{0,         -1.5+height_leaves,    0,    0+1/32, -1.0,       0.5},
 		})
 end
 
 if( minetest.get_modpath( 'moreblocks' ) or minetest.registered_nodes["stairs:stair_outer_wood"]) then
 	moresnow.register_snow_top( "outer_stair_top", {
-			        {-0.5, -1.0, -0.5,   0, -1.0+moresnow.snow_ground_height, 0  },
-			        {-0.5, -0.5,    0,   0, -0.5+moresnow.snow_ground_height, 0.5},
-			        {   0, -1.0, -0.5, 0.5, -1.0+moresnow.snow_ground_height, 0.5},
+			        {-0.5, -1.0, -0.5,   0, -1.0+height_snow, 0  },
+			        {-0.5, -0.5,    0,   0, -0.5+height_snow, 0.5},
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_snow, 0.5},
 
-				{-0.5,      -1.0+moresnow.snow_ground_height,    0-1/32,  0,   -0.5,       0  },
+				{-0.5,      -1.0+height_snow,    0-1/32,  0,   -0.5,       0  },
 				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
 
-				{0,         -1.0+moresnow.snow_ground_height,    0,    0+1/32, -0.5,       0.5},
+				{0,         -1.0+height_snow,    0,    0+1/32, -0.5,       0.5},
 				{0.5,       -1.5,      -0.5,  0.5+1/32, -1.0,       0.5},
 		}, { -- the wool version does not cover the lower legs
-			        {-0.5, -1.0, -0.5,   0, -1.0+moresnow.wool_ground_height, 0  },
-			        {-0.5, -0.5,    0,   0, -0.5+moresnow.wool_ground_height, 0.5},
-			        {   0, -1.0, -0.5, 0.5, -1.0+moresnow.wool_ground_height, 0.5},
+			        {-0.5, -1.0, -0.5,   0, -1.0+height_wool, 0  },
+			        {-0.5, -0.5,    0,   0, -0.5+height_wool, 0.5},
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_wool, 0.5},
 
-				{-0.5,      -1.0+moresnow.wool_ground_height,    0-1/32,  0,   -0.5,       0  },
-				{0,         -1.0+moresnow.wool_ground_height,    0,    0+1/32, -0.5,       0.5},
+				{-0.5,      -1.0+height_wool,    0-1/32,  0,   -0.5,       0  },
+				{0,         -1.0+height_wool,    0,    0+1/32, -0.5,       0.5},
+		}, { -- leaves version
+			        {-0.5, -1.0, -0.5,   0, -1.0+height_leaves, 0  },
+			        {-0.5, -0.5,    0,   0, -0.5+height_leaves, 0.5},
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_leaves, 0.5},
+
+				{-0.5,      -1.0+height_leaves,    0-1/32,  0,   -0.5,       0  },
+				{-0.5,      -1.5,      -0.5-1/32,  0.5, -1.0,      -0.5},
+
+				{0,         -1.0+height_leaves,    0,    0+1/32, -0.5,       0.5},
+				{0.5,       -1.5,      -0.5,  0.5+1/32, -1.0,       0.5},
 		})
 end
 if( minetest.get_modpath( 'moreblocks' ) or minetest.registered_nodes["stairs:stair_inner_wood"]) then
 	moresnow.register_snow_top( "inner_stair_top", {
-			        {   0, -1.0, -0.5, 0.5, -1.0+moresnow.snow_ground_height, 0  },
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_snow, 0  },
 
-			        {   0, -0.5,    0, 0.5, -0.5+moresnow.snow_ground_height, 0.5},
-			        {-0.5, -0.5, -0.5, 0,   -0.5+moresnow.snow_ground_height, 0.5},
+			        {   0, -0.5,    0, 0.5, -0.5+height_snow, 0.5},
+			        {-0.5, -0.5, -0.5, 0,   -0.5+height_snow, 0.5},
 
-				{   0,      -1.0+moresnow.snow_ground_height,  0-1/32, 0.5,    -0.5,       0 },
-				{   0,      -1.0+moresnow.snow_ground_height, -0.5,    0+1/32, -0.5,        0},
+				{   0,      -1.0+height_snow,  0-1/32, 0.5,    -0.5,       0 },
+				{   0,      -1.0+height_snow, -0.5,    0+1/32, -0.5,        0},
 		}, { -- the wool version does not cover the lower legs
-			        {   0, -1.0, -0.5, 0.5, -1.0+moresnow.wool_ground_height, 0  },
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_wool, 0  },
 
-			        {   0, -0.5,    0, 0.5, -0.5+moresnow.wool_ground_height, 0.5},
-			        {-0.5, -0.5, -0.5, 0,   -0.5+moresnow.wool_ground_height, 0.5},
+			        {   0, -0.5,    0, 0.5, -0.5+height_wool, 0.5},
+			        {-0.5, -0.5, -0.5, 0,   -0.5+height_wool, 0.5},
 
-				{   0,      -1.0+moresnow.wool_ground_height,  0-1/32, 0.5,    -0.5,       0 },
-				{   0,      -1.0+moresnow.wool_ground_height, -0.5,    0+1/32, -0.5,        0},
+				{   0,      -1.0+height_wool,  0-1/32, 0.5,    -0.5,       0 },
+				{   0,      -1.0+height_wool, -0.5,    0+1/32, -0.5,        0},
+		}, { -- leaves
+			        {   0, -1.0, -0.5, 0.5, -1.0+height_leaves, 0  },
+
+			        {   0, -0.5,    0, 0.5, -0.5+height_leaves, 0.5},
+			        {-0.5, -0.5, -0.5, 0,   -0.5+height_leaves, 0.5},
+
+				{   0,      -1.0+height_leaves,  0-1/32, 0.5,    -0.5,       0 },
+				{   0,      -1.0+height_leaves, -0.5,    0+1/32, -0.5,        0},
 		})
 end
 
@@ -353,7 +397,7 @@ minetest.register_node("moresnow:snow_soil", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5,  0.5, -0.5+moresnow.snow_ground_height, 0.5},
+			{-0.5, -0.5, -0.5,  0.5, -0.5+height_snow, 0.5},
 		},
 	},
 	groups = {crumbly=3,falling_node=1},
