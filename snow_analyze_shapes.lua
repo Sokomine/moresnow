@@ -194,8 +194,10 @@ end
 -- search for stairs and slabs after all nodes have been generated
 minetest.after( 0, moresnow.identify_stairs_and_slabs );
 
--- no snow on lava or flowing water
-moresnow.snow_cover[ moresnow.get_cid( 'default:lava_source')        ] = moresnow.c_air
-moresnow.snow_cover[ moresnow.get_cid( 'default:lava_flowing')       ] = moresnow.c_air
-moresnow.snow_cover[ moresnow.get_cid( 'default:water_flowing')      ] = moresnow.c_air
-moresnow.snow_cover[ moresnow.get_cid( 'default:river_water_flowing')] = moresnow.c_air
+-- no snow on lava or flowing water (usually handled automaticly - but we want to be on the safe side)
+local liquids = {'default:lava_source', 'default:lava_flowing', 'default:water_flowing', 'default:river_water_flowing'}
+for _, v in ipairs(liquids) do
+	if(minetest.registered_nodes[v] and moresnow.get_cid(v)) then
+		moresnow.snow_cover[ moresnow.get_cid(v) ] = moresnow.c_air
+	end
+end
