@@ -348,6 +348,13 @@ moresnow.register_shape = function( shape, new_name )
 
 			slopeboxedge[i+detail*1]={                0.5,  (v/detail)-1.5+(1.25/detail),            0.5-(i/detail),
 			                              -0.5+(i/detail),  (v/detail)-1.5+(1.25/detail)+(1/detail), 0.5-(i/detail)+(1/detail) };
+		elseif(     shape==4 ) then -- slope half
+			slopeboxedge[i+1]={                      -0.5,  (i/detail*0.5)-1.0+(1.25/detail*0.5),            (i/detail)-0.5,
+			                                          0.5,  (i/detail*0.5)-1.0+(1.25/detail*0.5)+(1/detail), (i/detail)-0.5+(1/detail)}
+
+		elseif(     shape==5 ) then -- slope half raised
+			slopeboxedge[i+1]={                      -0.5,  (i/detail*0.5)-1.5+(1.25/detail*0.5),            (i/detail)-0.5,
+			                                          0.5,  (i/detail*0.5)-1.5+(1.25/detail*0.5)+(1/detail), (i/detail)-0.5+(1/detail)}
 		end
         end
 
@@ -361,6 +368,8 @@ if(    minetest.get_modpath( 'homedecor_roofing' )
 	moresnow.register_shape( 1, 'ramp_top' );
 	moresnow.register_shape( 2, 'ramp_outer_top');
 	moresnow.register_shape( 3, 'ramp_inner_top');
+	moresnow.register_shape( 4, 'ramp_half_raised_top')
+	moresnow.register_shape( 5, 'ramp_half_top')
 end
 
 

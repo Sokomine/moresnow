@@ -22,7 +22,7 @@ moresnow.crazy_mode          = true
 -- which shapes can we cover?
 moresnow.shapes = {'top', 'fence', 'stair', 'slab',
 			'panel', 'micro', 'outer_stair', 'inner_stair',
-			'ramp', 'ramp_outer', 'ramp_inner'}
+			'ramp', 'ramp_outer', 'ramp_inner', 'ramp_half', 'ramp_half_raised'}
 
 -- which snow node equivals which leaves node?
 moresnow.nodetypes = {'snow','autumnleaves'}
