@@ -171,6 +171,14 @@ moresnow.identify_stairs_and_slabs = function()
 				moresnow.snow_cover[ id ] = moresnow.c_snow_top;
 			end
 
+		-- slopes - shingles from homedecor and/or slopes for roofs from moreblocks
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_inner.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_inner
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_outer.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_outer
+
 		-- add snow to the bottom of the node below; it will look acceptable, provided there is a solid node below
 		elseif( v and v.drawtype
 		          and (   v.drawtype == 'fencelike' or v.drawtype=='plantlike'
