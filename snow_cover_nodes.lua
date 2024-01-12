@@ -324,7 +324,7 @@ end
 
 moresnow.register_shape = function( shape, new_name )
 	
-	local d = 16; -- detail level (how many steps/boxes to simulate the slope?)
+	local d = 5 -- detail level (how many steps/boxes to simulate the slope?)
 
 	local slopeboxedge = {};
 	for i = 0, d-1 do
