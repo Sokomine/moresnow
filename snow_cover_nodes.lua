@@ -355,7 +355,8 @@ moresnow.register_shape = function( shape, new_name )
 end
 
 -- only add these if either technic (with its cnc machine) or homedecor (with shingles) are installed
-if(    minetest.get_modpath( 'homedecor' )
+if(    minetest.get_modpath( 'homedecor_roofing' )
+    or minetest.get_modpath( 'moreblocks')
     or minetest.get_modpath( 'technic' )) then
 	moresnow.register_shape( 1, 'ramp_top' );
 	moresnow.register_shape( 2, 'ramp_outer_top');

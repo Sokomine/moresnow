@@ -15,7 +15,7 @@ moresnow.identify_special_slopes = function( new_name, homedecor_prefix, technic
 		return;
 	end
 
-	local homedecor_materials = {'terracotta','wood','asphalt'};
+	local homedecor_materials = {'terracotta','wood','asphalt','glass'};
 	local technic_materials   = {'dirt','wood','stone','cobble','brick','sandstone','leaves',
 					'tree','steelblock','bronzeblock','stainless_steel','marble','granite'};
 
