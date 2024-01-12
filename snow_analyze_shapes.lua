@@ -182,6 +182,14 @@ moresnow.identify_stairs_and_slabs = function()
 			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_half
 		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_half_raised.obj") then
 			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_half_raised
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_inner_half.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_inner_half
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_inner_half_raised.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_inner_half_raised
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_outer_half.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_outer_half
+		elseif(v and v.drawtype == "mesh" and v.mesh and v.mesh == "moreblocks_slope_outer_half_raised.obj") then
+			moresnow.snow_cover[ id ] = moresnow.c_snow_ramp_outer_half_raised
 
 		-- add snow to the bottom of the node below; it will look acceptable, provided there is a solid node below
 		elseif( v and v.drawtype

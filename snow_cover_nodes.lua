@@ -324,37 +324,63 @@ end
 
 moresnow.register_shape = function( shape, new_name )
 	
-	local detail = 16;
+	local d = 16; -- detail level (how many steps/boxes to simulate the slope?)
 
 	local slopeboxedge = {};
-	for i = 0, detail-1 do
+	for i = 0, d-1 do
 
 		if(     shape==1 ) then -- slope; normal roof shingles
-			slopeboxedge[i+1]={                      -0.5,  (i/detail)-1.5+(1.25/detail),            (i/detail)-0.5,
-			                                          0.5,  (i/detail)-1.5+(1.25/detail)+(1/detail), (i/detail)-0.5+(1/detail)};
+			slopeboxedge[i+1]={ -0.5,  (i/d)-1.5+(1.25/d),       (i/d)-0.5,
+			                     0.5,  (i/d)-1.5+(1.25/d)+(1/d), (i/d)-0.5+(1/d)}
 
 		elseif( shape==2 ) then -- outer corner
-			slopeboxedge[i+1]={                      -0.5,  (i/detail)-1.5+(1.25/detail),            (i/detail)-0.5,
-			                               0.5-(i/detail),  (i/detail)-1.5+(1.25/detail)+(1/detail), (i/detail)-0.5+(1/detail)};
+			slopeboxedge[i+1]={ -0.5,        (i/d)-1.5+(1.25/d),       (i/d)-0.5,
+			                     0.5-(i/d),  (i/d)-1.5+(1.25/d)+(1/d), (i/d)-0.5+(1/d)}
 
-			slopeboxedge[i+detail*1]={     0.5-(i/detail),  (i/detail)-1.5+(1.25/detail)-(1/detail), 0.5,
-			                    0.5-(i/detail)+(1/detail),  (i/detail)-1.5+(1.25/detail),            -0.5+(i/detail)           };
-
-
+			slopeboxedge[i+d*1]={0.5-(i/d),        (i/d)-1.5+(1.25/d)-(1/d),  0.5,
+			                     0.5-(i/d)+(1/d),  (i/d)-1.5+(1.25/d),       -0.5+(i/d)}
 		elseif( shape==3 ) then -- inner corner
-			local v = detail-i;
-			slopeboxedge[i+1]={            (i/detail)-0.5,  (v/detail)-1.5+(1.25/detail)-(1/detail), -0.5+(1/detail-(1/detail)), 
-			                    (i/detail)-0.5+(1/detail),  (v/detail)-1.5+(1.25/detail),            0.5-(i/detail)            };
+			local v = d-i;
+			slopeboxedge[i+1]={ (i/d)-0.5,        (v/d)-1.5+(1.25/d)-(1/d), -0.5+(1/d-(1/d)),
+			                    (i/d)-0.5+(1/d),  (v/d)-1.5+(1.25/d),        0.5-(i/d)}
 
-			slopeboxedge[i+detail*1]={                0.5,  (v/detail)-1.5+(1.25/detail),            0.5-(i/detail),
-			                              -0.5+(i/detail),  (v/detail)-1.5+(1.25/detail)+(1/detail), 0.5-(i/detail)+(1/detail) };
-		elseif(     shape==4 ) then -- slope half
-			slopeboxedge[i+1]={                      -0.5,  (i/detail*0.5)-1.0+(1.25/detail*0.5),            (i/detail)-0.5,
-			                                          0.5,  (i/detail*0.5)-1.0+(1.25/detail*0.5)+(1/detail), (i/detail)-0.5+(1/detail)}
+			slopeboxedge[i+d*1]={ 0.5,        (v/d)-1.5+(1.25/d),       0.5-(i/d),
+			                     -0.5+(i/d),  (v/d)-1.5+(1.25/d)+(1/d), 0.5-(i/d)+(1/d) }
+		elseif( shape==4 ) then -- slope half
+			slopeboxedge[i+1]={-0.5,  (i/d*0.5)-1.0+(1.25/d*0.5),       (i/d)-0.5,
+			                    0.5,  (i/d*0.5)-1.0+(1.25/d*0.5)+(1/d), (i/d)-0.5+(1/d)}
 
-		elseif(     shape==5 ) then -- slope half raised
-			slopeboxedge[i+1]={                      -0.5,  (i/detail*0.5)-1.5+(1.25/detail*0.5),            (i/detail)-0.5,
-			                                          0.5,  (i/detail*0.5)-1.5+(1.25/detail*0.5)+(1/detail), (i/detail)-0.5+(1/detail)}
+		elseif( shape==5 ) then -- slope half raised
+			slopeboxedge[i+1]={-0.5,  (i/d*0.5)-1.5+(1.25/d*0.5),       (i/d)-0.5,
+			                    0.5,  (i/d*0.5)-1.5+(1.25/d*0.5)+(1/d), (i/d)-0.5+(1/d)}
+
+		elseif( shape==6 ) then -- outer corner of half slope raised
+			slopeboxedge[i+1]={ -0.5,        (i/d*0.5)-1.5+(1.25/d*0.5),       (i/d)-0.5,
+			                     0.5-(i/d),  (i/d*0.5)-1.5+(1.25/d*0.5)+(1/d), (i/d)-0.5+(1/d)}
+
+			slopeboxedge[i+d*1]={0.5-(i/d),        (i/d*0.5)-1.5+(1.25/d*0.5)-(1/d),  0.5,
+			                     0.5-(i/d)+(1/d),  (i/d*0.5)-1.5+(1.25/d*0.5),       -0.5+(i/d)}
+
+		elseif( shape==7 ) then -- outer corner of half slope
+			slopeboxedge[i+1]={ -0.5,        (i/d*0.5)-1.0+(1.25/d*0.5),       (i/d)-0.5,
+			                     0.5-(i/d),  (i/d*0.5)-1.0+(1.25/d*0.5)+(1/d), (i/d)-0.5+(1/d)}
+
+			slopeboxedge[i+d*1]={0.5-(i/d),        (i/d*0.5)-1.0+(1.25/d*0.5)-(1/d),  0.5,
+			                     0.5-(i/d)+(1/d),  (i/d*0.5)-1.0+(1.25/d*0.5),       -0.5+(i/d)}
+		elseif( shape==8 ) then -- inner corner of half slope raised
+			local v = d-i;
+			slopeboxedge[i+1]={ (i/d)-0.5,        (v/d*0.5)-1.5+(1.25/d*0.5)-(1/d), -0.5+(1/d-(1/d)),
+			                    (i/d)-0.5+(1/d),  (v/d*0.5)-1.5+(1.25/d*0.5),        0.5-(i/d)}
+
+			slopeboxedge[i+d*1]={ 0.5,        (v/d*0.5)-1.5+(1.25/d*0.5),       0.5-(i/d),
+			                     -0.5+(i/d),  (v/d*0.5)-1.5+(1.25/d*0.5)+(1/d), 0.5-(i/d)+(1/d) }
+		elseif( shape==9 ) then -- inner corner of half slope
+			local v = d-i;
+			slopeboxedge[i+1]={ (i/d)-0.5,        (v/d*0.5)-1.0+(1.25/d*0.5)-(1/d), -0.5+(1/d-(1/d)),
+			                    (i/d)-0.5+(1/d),  (v/d*0.5)-1.0+(1.25/d*0.5),        0.5-(i/d)}
+
+			slopeboxedge[i+d*1]={ 0.5,        (v/d*0.5)-1.0+(1.25/d*0.5),       0.5-(i/d),
+			                     -0.5+(i/d),  (v/d*0.5)-1.0+(1.25/d*0.5)+(1/d), 0.5-(i/d)+(1/d) }
 		end
         end
 
@@ -370,6 +396,10 @@ if(    minetest.get_modpath( 'homedecor_roofing' )
 	moresnow.register_shape( 3, 'ramp_inner_top');
 	moresnow.register_shape( 4, 'ramp_half_raised_top')
 	moresnow.register_shape( 5, 'ramp_half_top')
+	moresnow.register_shape( 6, 'ramp_outer_half_top')
+	moresnow.register_shape( 7, 'ramp_outer_half_raised_top')
+	moresnow.register_shape( 8, 'ramp_inner_half_top')
+	moresnow.register_shape( 9, 'ramp_inner_half_raised_top')
 end
 
 
