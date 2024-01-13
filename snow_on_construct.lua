@@ -186,7 +186,7 @@ moresnow.on_construct_select_shape = function( pos, falling_node_name, default_n
 			-- in such a case it helps to drop the snow and let it fall until it hits something
 			if( node2 and node2.name == 'air' ) then
 				-- let the snow continue to fall
-				spawn_falling_node( {x=pos.x, y=pos.y-2, z=pos.z}, {name= default_name})
+				moresnow.spawn_falling_node( {x=pos.x, y=pos.y-2, z=pos.z}, {name= default_name})
 			end
 			return { remove_node = true};
 		end
