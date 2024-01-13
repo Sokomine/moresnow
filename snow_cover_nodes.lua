@@ -59,7 +59,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 			fixed = leaves_nodebox or wool_nodebox or fixed_nodebox,
 		},
 		drop = "moresnow:autumnleaves",
-		groups = {falling_node=1, float=1, not_in_creative_inventory=1, snappy=3, flammable=2, leaves=1, not_in_creative_inventory=1},
+		groups = {falling_node=1, float=1, not_in_creative_inventory=1, snappy=3, flammable=2, leaves=1},
 		sounds = default.node_sound_leaves_defaults(),
 		on_construct = function( pos )
 			return moresnow.on_construct_leaves( pos, 'moresnow:autumnleaves_'..node_name );
@@ -69,6 +69,13 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 
 	if( wool_nodebox and moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
            for _,v in ipairs( moresnow.wool_dyes ) do
+		local ptype2 = "facedir"
+		local palette = nil
+		if(v == "multicolor") then
+			ptype2 = "color4dir"
+--			palette = "unifieddyes_palette_extended.png"
+			palette = "moresnow_palette.png"
+		end
 		minetest.register_node( "moresnow:wool_"..v.."_"..node_name, {
 			description = "layers of wool ("..v..")",
 			tiles = {"wool_"..v..".png"},
@@ -76,14 +83,15 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 --			wield_image = "moresnow_autumnleaves.png",
 			is_ground_content = true,
 			paramtype = "light",
-			paramtype2 = "facedir",
+			paramtype2 = ptype2,
+			palette = palette,
 			drawtype = "nodebox",
 			node_box = {
 					type  = "fixed",
 					fixed = wool_nodebox,
 			},
 			drop =  "moresnow:wool_"..v, 
-			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, not_in_creative_inventory=1}, 
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, not_in_creative_inventory=1},
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
@@ -156,12 +164,33 @@ end
 
 if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
         for _,v in ipairs( moresnow.wool_dyes ) do
+		local ptype2 = "facedir"
+		local palette = nil
+		local on_punch = nil
+		local on_rightclick = nil
+		if(v == "multicolor") then
+			ptype2 = "color4dir"
+--			palette = "unifieddyes_palette_extended.png"
+			palette = "moresnow_palette.png"
+			on_punch = function(pos, node, puncher, pointed_thing)
+				local node = minetest.get_node(pos)
+				node.param2 = (node.param2 + 4) % 256
+				minetest.swap_node(pos, node)
+			end
+			on_rightclick = function(pos, node, puncher, pointed_thing)
+				local node = minetest.get_node(pos)
+				node.param2 = (node.param2 - 4) % 256
+				minetest.swap_node(pos, node)
+			end
+		end
                 table.insert( moresnow.nodetypes, 'wool_'..v );
 		minetest.register_node( "moresnow:wool_"..v, {
 			description = "layers of wool ("..v..")",
 			tiles = {"wool_"..v..".png"},
 			is_ground_content = true,
 			paramtype = "light",
+			paramtype2 = ptype2,
+			palette = palette,
 			leveled = 7, -- can pile up as well
 			drawtype = "nodebox",
 			node_box = {
@@ -177,6 +206,8 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 			on_construct = function( pos )
 				return moresnow.on_construct_wool( pos, 'moresnow:wool_'..v, v );
 			end,
+			on_punch = on_punch,
+			on_rightclick = on_rightclick,
 		});
 
 		-- craft one wool block into 9 layers
