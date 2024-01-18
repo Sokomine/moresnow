@@ -414,6 +414,19 @@ moresnow.register_shape = function( shape, new_name )
 			                     -0.5+(i/d),  (v/d*0.5)-1.0+(1.25/d*0.5)+(1/d), 0.5-(i/d)+(1/d) }
 		end
         end
+	-- add a thin layer at the front of the node - like with stairs - for the flatter ones
+	if(    shape == 5 or shape == 6 or shape == 1) then
+		table.insert(slopeboxedge, {-0.5,      -1.5,      -0.5-1/32,  0.5, -1.25,     -0.5})
+		if(shape == 6) then
+			table.insert(slopeboxedge, { 0.5, -1.5, -0.5, 0.5+1/32, -1.25, 0.5})
+		end
+	-- add a thin layer at the front of the node - like with stairs - for the half raised ones
+	elseif(shape == 4 or shape == 7) then
+		table.insert(slopeboxedge, {-0.5,      -1.5,      -0.5-1/16,  0.5, -0.8,      -0.5})
+		if(shape == 7) then
+			table.insert(slopeboxedge, { 0.5, -1.5, -0.5, 0.5+1/16,  -0.8, 0.5})
+		end
+	end
 
 	moresnow.register_snow_top( new_name, slopeboxedge, nil ); -- no wool version for these
 end
