@@ -10,8 +10,8 @@ moresnow.enable_autumnleaves = true
 -- wool is useful for covering stairs; turns them into benches;
 -- change this if you want the wool functionality only for a few nodes (i.e. only white - or none at all)
 moresnow.wool_dyes           =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
-                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green",
-				"multicolor"};
+                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"}
+moresnow.enable_wool_cover   = true
 -- the snow cannon allows to create snow
 moresnow.enable_snow_cannon  = true
 -- with this set, the snow cannon can *shoot* snowballs - which will fly a long way;
@@ -19,6 +19,11 @@ moresnow.enable_snow_cannon  = true
 moresnow.crazy_mode          = true 
 -- end of configuration
 --------------------------------------------------------------------------------
+
+-- one colored wool layer that comes in 64 colors (uses color4dir):
+if(moresnow.enable_wool_cover) then
+	table.insert(moresnow.wool_dyes, "multicolor")
+end
 
 -- which shapes can we cover?
 moresnow.shapes = {'top', 'fence', 'stair', 'slab',
@@ -70,3 +75,5 @@ if( moresnow.enable_snow_cannon ) then
 	dofile(modpath..'snow_cannon.lua');
 end
 
+-- crafting
+dofile(modpath..'crafts.lua')
