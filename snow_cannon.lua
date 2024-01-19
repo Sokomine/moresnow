@@ -381,16 +381,6 @@ minetest.register_abm({
 })
 
 
-minetest.register_craft({
-        output = 'moresnow:snow_cannon',
-        recipe = {
-                { 'default:steel_ingot', '',                   'default:steel_ingot' },
-                { 'default:steel_ingot', 'default:mese',       'default:steel_ingot' },
-                { 'default:copper_ingot','default:steelblock', 'default:copper_ingot' },
-        }
-})
-
-
 -- the snow mod does this already
 if( not( minetest.get_modpath( 'snow' ))) then
 	minetest.override_item("default:snow", {

@@ -8,12 +8,11 @@ moresnow = {}
 -- The txture and idea for them came from LazyJ.
 moresnow.enable_autumnleaves = true
 -- wool is useful for covering stairs; turns them into benches;
--- change this if you want the wool functionality only for a few nodes (i.e. only white - or none at all)
---moresnow.wool_dyes           =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
---                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"}
 -- no need to define so many - we use multicolor now for new worlds:
 moresnow.wool_dyes           = {}
 moresnow.enable_wool_cover   = true
+-- change this if you want the wool functionality only for a few nodes (i.e. only white - or none at all)
+moresnow.enable_legacy_wool  = false
 -- the snow cannon allows to create snow
 moresnow.enable_snow_cannon  = true
 -- with this set, the snow cannon can *shoot* snowballs - which will fly a long way;
@@ -22,6 +21,12 @@ moresnow.crazy_mode          = true
 -- end of configuration
 --------------------------------------------------------------------------------
 
+-- those are many nodes. enable_legacy_wool only on old servers where players have built with these
+-- nodes. All others are better off with just enable_wool_cover:
+if(moresnow.enable_legacy_wool) then
+	moresnow.wool_dyes =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
+                               "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"}
+end
 -- one colored wool layer that comes in 64 colors (uses color4dir):
 if(moresnow.enable_wool_cover) then
 	table.insert(moresnow.wool_dyes, "multicolor")

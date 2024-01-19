@@ -130,37 +130,8 @@ if( moresnow.enable_autumnleaves ) then
 			return moresnow.on_construct_leaves( pos, 'moresnow:autumnleaves' );
 		end,
 	})
-
-	-- full leaves blocks for decorative autumn trees
-	minetest.register_craft({
-			type = "shapeless",
-			output = 'moresnow:autumnleaves_tree',
-			recipe = {'default:leaves','default:torch'},
-			replacements = {{'default:torch','default:torch'}}
-		});
-
-	-- 9 layers of autumn leaves
-	minetest.register_craft({
-			output = 'moresnow:autumnleaves 9',
-			recipe = { {'moresnow:autumnleaves_tree'}
-		}});
-
-	-- reverse craft
-	minetest.register_craft({
-			output = 'moresnow:autumnleaves_tree',
-			recipe = { {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'},
-			           {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'},
-			           {'moresnow:autumnleaves','moresnow:autumnleaves','moresnow:autumnleaves'}
-		}});
-
-	-- white/grey leaves for trees in winter
-	minetest.register_craft({
-			type = "shapeless",
-			output = 'moresnow:winterleaves_tree',
-			recipe = {'moresnow:autumnleaves_tree','default:snow'},
-			replacements = {{'default:snow','default:snow'}}
-		});
 end
+
 
 if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
         for _,v in ipairs( moresnow.wool_dyes ) do
@@ -198,21 +169,6 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 				return moresnow.on_construct_wool( pos, 'moresnow:wool_'..v, v );
 			end,
 		});
-
-		-- craft one wool block into 9 layers
-		minetest.register_craft({
-			output = 'moresnow:wool_'..v..' 9',
-			recipe = { {'wool:'..v}
-			}});
-
-		-- craft the wool layers back to a full wool block
-		minetest.register_craft({
-			output = 'wool:'..v,
-			recipe = {
-				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
-				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
-				{ 'moresnow:wool_'..v, 'moresnow:wool_'..v, 'moresnow:wool_'..v },
-			}});
         end
 end
 
