@@ -65,6 +65,16 @@ moresnow.on_construct_wool = function(   pos, falling_node_name, color )
 	end
 end
 
+moresnow.on_construct_wool_multicolor = function(pos, node)
+	local falling_node_name = 'moresnow:wool_multicolor'
+	local color = "multicolor"
+	local res = moresnow.on_construct( pos, falling_node_name, 'moresnow:wool_'..color, 'wool_'..color );
+	if(res) then
+		local p2 = node.param2 - (node.param2 % 4) + res.param2
+		minetest.swap_node(pos, {name=res.name, param2=p2})
+	end
+end
+
 
 -- this function works with content ids because we want it to call for falling
 -- snow nodes AND from mapgen (where content ids are at hand)

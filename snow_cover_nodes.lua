@@ -191,6 +191,10 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
+				local n = minetest.get_node(pos)
+				if(n and n.name == "moresnow:wool_multicolor") then
+					return moresnow.on_construct_wool_multicolor(pos, n)
+				end
 				return moresnow.on_construct_wool( pos, 'moresnow:wool_'..v, v );
 			end,
 		});
