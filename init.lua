@@ -84,3 +84,13 @@ end
 
 -- crafting
 dofile(modpath..'crafts.lua')
+
+--[[
+-- remove the "attached_node" value from farming plants;
+-- uncomment this if you dislike plants being replaced with nodes placed on top of them
+for node_name, def in pairs(minetest.registered_nodes) do
+	if(def and def.groups and def.groups.plant and def.groups.plant > 0) then
+		minetest.registered_nodes[node_name].buildable_to = nil
+	end
+end
+--]]

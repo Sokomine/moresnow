@@ -30,7 +30,8 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 			fixed = fixed_nodebox,
 		},
 		drop = "default:snow",
-		groups = {crumbly=3,falling_node=1, float=1, melt=1, not_in_creative_inventory=1},
+		groups = {crumbly=3,falling_node=1, float=1, melt=1, not_in_creative_inventory=1,
+			soft_falling=1},
 		sounds = default.node_sound_dirt_defaults({
 			footstep = {name="default_snow_footstep", gain=0.25},
 			dug = {name="default_snow_footstep", gain=0.75},
@@ -59,7 +60,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 			fixed = leaves_nodebox or wool_nodebox or fixed_nodebox,
 		},
 		drop = "moresnow:autumnleaves",
-		groups = {falling_node=1, float=1, not_in_creative_inventory=1, snappy=3, flammable=2, leaves=1},
+		groups = {falling_node=1, float=1, not_in_creative_inventory=1, snappy=3, flammable=2, leaves=1, soft_falling=1},
 		sounds = default.node_sound_leaves_defaults(),
 		on_construct = function( pos )
 			return moresnow.on_construct_leaves( pos, 'moresnow:autumnleaves_'..node_name );
@@ -91,7 +92,7 @@ moresnow.register_snow_top = function( node_name, fixed_nodebox, wool_nodebox, l
 					fixed = wool_nodebox,
 			},
 			drop =  "moresnow:wool_"..v, 
-			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, not_in_creative_inventory=1},
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, not_in_creative_inventory=1, soft_falling=1},
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
@@ -124,7 +125,7 @@ if( moresnow.enable_autumnleaves ) then
 				},
 		},
 
-		groups = {falling_node=1, float=1, snappy=3, flammable=2, leaves=1},
+		groups = {falling_node=1, float=1, snappy=3, flammable=2, leaves=1, soft_falling=1},
 		sounds = default.node_sound_leaves_defaults(),
 		on_construct = function( pos )
 			return moresnow.on_construct_leaves( pos, 'moresnow:autumnleaves' );
@@ -158,7 +159,7 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 					},
 			},
 	
-			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1},
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1, float=1, soft_falling=1},
 			sounds = default.node_sound_defaults(),
 
 			on_construct = function( pos )
@@ -429,7 +430,7 @@ minetest.register_node("moresnow:snow_soil", {
 			{-0.5, -0.5, -0.5,  0.5, -0.5+height_snow, 0.5},
 		},
 	},
-	groups = {crumbly=3,falling_node=1},
+	groups = {crumbly=3,falling_node=1, soft_falling=1},
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_snow_footstep", gain=0.25},
 		dug = {name="default_snow_footstep", gain=0.75},
