@@ -89,6 +89,7 @@ dofile(modpath..'crafts.lua')
 -- make sure default:snow does not crush plants
 minetest.registered_nodes["default:snow"].groups.soft_falling = 1
 
+dofile(modpath..'soft_falling.lua')
 
 --[[
 -- remove the "attached_node" value from farming plants;
