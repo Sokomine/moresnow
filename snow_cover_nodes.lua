@@ -166,22 +166,9 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
         for _,v in ipairs( moresnow.wool_dyes ) do
 		local ptype2 = "facedir"
 		local palette = nil
-		local on_punch = nil
-		local on_rightclick = nil
 		if(v == "multicolor") then
 			ptype2 = "color4dir"
---			palette = "unifieddyes_palette_extended.png"
 			palette = "moresnow_palette.png"
-			on_punch = function(pos, node, puncher, pointed_thing)
-				local node = minetest.get_node(pos)
-				node.param2 = (node.param2 + 4) % 256
-				minetest.swap_node(pos, node)
-			end
-			on_rightclick = function(pos, node, puncher, pointed_thing)
-				local node = minetest.get_node(pos)
-				node.param2 = (node.param2 - 4) % 256
-				minetest.swap_node(pos, node)
-			end
 		end
                 table.insert( moresnow.nodetypes, 'wool_'..v );
 		minetest.register_node( "moresnow:wool_"..v, {
@@ -206,8 +193,6 @@ if( moresnow.wool_dyes and minetest.get_modpath( 'wool' )) then
 			on_construct = function( pos )
 				return moresnow.on_construct_wool( pos, 'moresnow:wool_'..v, v );
 			end,
-			on_punch = on_punch,
-			on_rightclick = on_rightclick,
 		});
 
 		-- craft one wool block into 9 layers

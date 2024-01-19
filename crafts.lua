@@ -16,26 +16,28 @@ if(moresnow.enable_wool_cover) then
 		minetest.register_craft({
 			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", c),
 			recipe = {{"moresnow:wool_multicolor", dye_item, ""}},
-			replacements = {{"", dye_item, ""}},
+			replacements = {{dye_item, dye_item}},
 		})
 		-- get the other four color variants each:
 		-- based on darkest color from the respective wool variant:
 		minetest.register_craft({
-			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+16)),
-			recipe = {{"moresnow:wool_multicolor", dye_item, "dye:black",}},
-			replacements = {{"", dye_item, "dye:black"}},
+			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+64)),
+			recipe = {{"moresnow:wool_multicolor", "", dye_item}},
+			replacements = {{dye_item, dye_item}},
 		})
 		-- based on color by standard name (i.e. "red"):
 		minetest.register_craft({
-			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+32)),
-			recipe = {{"moresnow:wool_multicolor", dye_item, "dye:grey",}},
-			replacements = {{"", dye_item, "dye:grey"}},
+			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+128)),
+			recipe = {{"moresnow:wool_multicolor", "",       ""},
+			          {"",                         dye_item, ""}},
+			replacements = {{dye_item, dye_item}},
 		})
 		-- pastel colors:
 		minetest.register_craft({
-			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+48)),
-			recipe = {{"moresnow:wool_multicolor", dye_item, "dye:white",}},
-			replacements = {{"", dye_item, "dye:white"}},
+			output = minetest.itemstring_with_palette("moresnow:wool_multicolor", (c+192)),
+			recipe = {{"moresnow:wool_multicolor", "",       ""},
+			          {"",                         "", dye_item}},
+			replacements = {{dye_item, dye_item}},
 		})
 	end
 end

@@ -9,8 +9,10 @@ moresnow = {}
 moresnow.enable_autumnleaves = true
 -- wool is useful for covering stairs; turns them into benches;
 -- change this if you want the wool functionality only for a few nodes (i.e. only white - or none at all)
-moresnow.wool_dyes           =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
-                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"}
+--moresnow.wool_dyes           =  {"white", "grey", "black", "red", "yellow", "green", "cyan", "blue",
+--                                "magenta", "orange", "violet", "brown", "pink", "dark_grey", "dark_green"}
+-- no need to define so many - we use multicolor now for new worlds:
+moresnow.wool_dyes           = {}
 moresnow.enable_wool_cover   = true
 -- the snow cannon allows to create snow
 moresnow.enable_snow_cannon  = true
