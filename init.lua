@@ -85,6 +85,11 @@ end
 -- crafting
 dofile(modpath..'crafts.lua')
 
+
+-- make sure default:snow does not crush plants
+minetest.registered_nodes["default:snow"].groups.soft_falling = 1
+
+
 --[[
 -- remove the "attached_node" value from farming plants;
 -- uncomment this if you dislike plants being replaced with nodes placed on top of them
